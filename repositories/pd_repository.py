@@ -1,9 +1,7 @@
 from PyQt6.QtSql import QSqlQuery
 from typing import List
 from repositories.repository import Repository
-from generators import sql
 from model_data.pd import Pd
-from db.db import Db
 
 
 class PdRepository(Repository):
