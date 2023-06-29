@@ -10,9 +10,6 @@ if __name__ == '__main__':
     main_window = MainWindow()
     main_window.show()
     conn = Connection()
-    re = PdRepository()
-    pd = Pd(0, "ФИО", None)
-    l = [pd]
-    re.insert(l)
+
 
     sys.exit(app.exec())
