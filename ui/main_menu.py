@@ -11,9 +11,26 @@ class MainMenu(QMenuBar):
         self.__goals = nsi_menu.addAction("Цели обработки ПД")
         self.__category = nsi_menu.addAction("Категории субъектов ПД")
 
+        load_menu = self.addMenu("Загрузка данных")
+        self.__orgs = load_menu.addAction("Организационные единицы ...")
+        self.__faces = load_menu.addAction("Лица ...")
+        self.__tn = load_menu.addAction("Табельные номера ...")
+
         help_menu = self.addMenu("Справка")
         self.__about = help_menu.addAction("О программе...")
         self.__about_qt = help_menu.addAction("О библиотеке Qt...")
+
+    @property
+    def orgs(self):
+        return self.__orgs
+
+    @property
+    def faces(self):
+        return self.__faces
+
+    @property
+    def tn(self):
+        return self.__tn
 
     @property
     def about(self):

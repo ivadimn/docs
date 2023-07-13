@@ -1,3 +1,26 @@
+CREATE TABLE "org" (
+    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+    "code" TEXT NOT NULL,
+    "name"  TEXT NOT NULL,
+    "code_word" TEXT,
+    "parent_id" INT,
+    "created_at" TEXT NOT NULL,
+    "closed_at" TEXT
+);
+CREATE UNIQUE INDEX "org_code_IDX" ON "org" ("code" );
+CREATE UNIQUE INDEX "org_name_IDX" ON "org" ("name" );
+
+
+
+CREATE TABLE "face" (
+	"id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+	"snils"	TEXT NOT NULL,
+	"inn"	TEXT NOT NULL,
+	"birthday" TEXT NOT NULL
+);
+CREATE UNIQUE INDEX "face_snils_IDX" ON "face" ("snils" );
+CREATE UNIQUE INDEX "face_inn_IDX" ON "face" ("inn" );
+
 CREATE TABLE "pd" (
 	"id"	INTEGER PRIMARY KEY AUTOINCREMENT,
 	"name"	TEXT NOT NULL,
