@@ -1,7 +1,35 @@
 from PyQt6.QtWidgets import QMainWindow, QMessageBox, QFileDialog, QApplication
 from PyQt6.QtCore import pyqtSlot, Qt
 from ui.main_menu import MainMenu
-from load_data.load import load_deps
+from load_data.load_orgs import LoadOrgs
+from repositories.org_repository import TreeRepository
+
+
+data = [
+('Вина', 0, 0),
+('Белые сорта вин', 1, 1),
+('Французские белые вина', 2, 2),
+('Chardonnay', 3, 3),
+('Colombard', 4, 3),
+('Folle blanche', 5, 3),
+('Ugni blanc', 6, 3),
+('Muscadelle', 7, 3),
+('Chenin', 8, 3),
+('Итальянские белые вина', 9, 2),
+('Castelli Romani Bianco', 10, 3),
+('Tusculum Bianco', 11, 3),
+('Красные сорта вин', 12, 1),
+('Французкие красные вина', 13, 2),
+('Cabernet', 14, 3),
+('Franc', 15, 4),
+('Sauvignon', 16, 4),
+('Carmenere', 17, 3),
+('Beaujolais nouveau', 18, 3),
+('Итальянские красные вина', 19, 2),
+('Bardolino', 20, 3),
+('Syrah Cabernet', 21, 3),
+('Castelli Romani Rosso', 22, 3),
+]
 
 
 class MainWindow(QMainWindow):
@@ -40,6 +68,7 @@ class MainWindow(QMainWindow):
         file_dlg.setNameFilter("Excel files (*.xls *.xlsx)")
         if file_dlg.exec():
             file_name = file_dlg.selectedFiles()[0]
-            load_deps(file_name)
+            load = LoadOrgs(file_name)
+            load.first_load()
 
 

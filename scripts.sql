@@ -10,6 +10,14 @@ CREATE TABLE "org" (
 CREATE UNIQUE INDEX "org_code_IDX" ON "org" ("code" );
 CREATE UNIQUE INDEX "org_name_IDX" ON "org" ("name" );
 
+CREATE TABLE "org_tree" (
+    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+    "org_id" INT NOT NULL,
+    "parent_id"  INT,
+    CONSTRAINT org_tree_org_id_FK FOREIGN KEY (org_id) REFERENCES org(id)
+    CONSTRAINT org_tree_parent_id_FK FOREIGN KEY (parent_id) REFERENCES org(id)
+);
+
 
 
 CREATE TABLE "face" (

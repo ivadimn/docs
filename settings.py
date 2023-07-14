@@ -5,3 +5,5 @@ db_params = {
     "dbname": "docs.db",
     "password": "7922448",
 }
+
+date_format = "%Y-%m-%d"
