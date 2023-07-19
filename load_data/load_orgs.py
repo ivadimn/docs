@@ -14,6 +14,7 @@ class LoadOrgs:
 
     def __init__(self, file_name: str):
         self.deps = list()
+        self.orgs = list()
         self.__load_deps(file_name)
 
     def __load_deps(self, file_name: str):
@@ -22,6 +23,9 @@ class LoadOrgs:
         for val in data.values:
             self.deps.append((val[0], val[1], val[2],))
         print(self.deps)
+
+    def __load_orgs(self):
+        rep = OrgRepository()
 
     def first_load(self):
         rep = OrgRepository()

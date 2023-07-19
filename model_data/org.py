@@ -11,7 +11,8 @@ class Org(Entity):
     code_word: Optional[str]
     parent_id: Optional[int]
     created_at: str
-    closed_at: Optional[str]
+    closed_at: Optional[str] = None
+    child: Optional[list] = None
 
     def row(self) -> tuple:
         return str(self.id), self.code, self.name, self.code_word, str(self.parent_id)

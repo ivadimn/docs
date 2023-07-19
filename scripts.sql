@@ -10,6 +10,14 @@ CREATE TABLE "org" (
 CREATE UNIQUE INDEX "org_code_IDX" ON "org" ("code" );
 CREATE UNIQUE INDEX "org_name_IDX" ON "org" ("name" );
 
+CREATE TABLE tree_path (
+	parent_id INTEGER NOT NULL,
+	child_id INTEGER NOT NULL,
+	PRIMARY KEY (parent_id, child_id),
+	CONSTRAINT tree_path_parent_id_FK FOREIGN KEY (parent_id) REFERENCES org(id) ON DELETE CASCADE
+	CONSTRAINT tree_path_child_id_FK FOREIGN KEY (child_id) REFERENCES org(id) ON DELETE CASCADE
+);
+
 CREATE TABLE "org_tree" (
     "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
     "org_id" INT NOT NULL,
