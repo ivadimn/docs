@@ -17,8 +17,8 @@ class Org(Entity):
     def row(self) -> tuple:
         return str(self.id), self.code, self.name, self.code_word, str(self.parent_id)
 
-    def __eq__(self, other):
-        return self.name == other.name
+    def __eq__(self, other: "Org"):
+        return self.name.upper() == other.name.upper()
 
     @classmethod
     def extract_code(cls, name: str) -> str:
