@@ -7,8 +7,8 @@ from model_data.org import Org
 class OrgRepository(Repository):
     _SELECT_ONE = """
         SELECT id, code, name, code_word, parent_id, created_at FROM org WHERE id=?; """
-    _SELECT_BY_NAME = """
-           SELECT id, code, name, code_word, parent_id, created_at FROM org WHERE name=?; """
+    _SELECT_BY_CODE = """
+           SELECT id, code, name, code_word, parent_id, created_at FROM org WHERE code=?; """
     _SELECT_LEVEL_CHILD = """ S
         ELECT id, code, name, code_word, parent_id, created_at FROM org WHERE parent_id=?; """
     _SELECT_FIRST_LEVEL = """
@@ -41,14 +41,14 @@ class OrgRepository(Repository):
         else:
             return None
 
-    def select_by_name(self, name: str) -> Optional[Org]:
+    def select_by_code(self, code: str) -> Optional[Org]:
         query = QSqlQuery()
-        query.prepare(self._SELECT_BY_NAME)
-        query.addBindValue(name)
+        query.prepare(self._SELECT_BY_CODE)
+        query.addBindValue(code)
         query.exec()
         if query.first():
             return Org(query.value("id"), query.value("code"), query.value("name"),
-                       query.value("code_word"), query.value("parent-id"), query.value("created_at"))
+                       query.value("code_word"), query.value("parent_id"), query.value("created_at"))
         else:
             return None
 
@@ -98,7 +98,7 @@ class OrgRepository(Repository):
 
     def select(self, params: dict = None) -> List[Org]:
         query = QSqlQuery()
-        query.prepare(self._SELECT_FIRST_LEVEL)
+        query.prepare(self._SELECT)
         query.exec()
         orgs = self.__extract_data(query)
         return orgs

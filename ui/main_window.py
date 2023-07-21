@@ -69,6 +69,6 @@ class MainWindow(QMainWindow):
         if file_dlg.exec():
             file_name = file_dlg.selectedFiles()[0]
             load = LoadOrgs(file_name)
-            load.first_load()
+            load.load_orgs()
 
 

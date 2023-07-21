@@ -14,7 +14,7 @@ from pprint import pprint
 class LoadOrgs:
 
     def __init__(self, file_name: str):
-        self.deps = list()
+        self.deps: List[Org] = list()
         self.orgs = list()
         self.__load_deps(file_name)                     # из файла
 
@@ -34,18 +34,16 @@ class LoadOrgs:
     def load_orgs(self):
         rep = OrgRepository()
         self.orgs = rep.select()
-        parent_id = 0
-        name = ""
         for dep in self.deps:
+            if dep in self.orgs:
+                continue
             if dep.id != 0:
-                name = dep.name.upper()
-            if dep not in self.orgs:
-                if dep.id != 0:
-                    parent_id = dep.insert([dep])
-                else:
-                    parent_org = rep.select_by_name(name)
-                    dep.parent_id = parent_org.id
-                    parent_id = rep.insert(dep)
+                rid = rep.insert([dep])
+            else:
+                code_parent = Org.get_parent_code(dep.code)
+                parent_org = rep.select_by_code(code_parent)
+                dep.parent_id = parent_org.id
+                rep.insert([dep])
 
     def first_load(self):
         rep = OrgRepository()

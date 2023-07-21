@@ -22,8 +22,15 @@ class Org(Entity):
 
     @classmethod
     def extract_code(cls, name: str) -> str:
-        nc = name.split(" ")
+        nc = name.strip().split(" ")
         if len(nc) == 1:
             return nc[0]
         else:
-            return nc[1]
+            return nc[-1]
+
+    @classmethod
+    def get_parent_code(cls, code: str):
+        codes = code.split("/")
+        if len(codes) < 3:
+            return codes[0]
+        return "/".join(codes[:-1])
