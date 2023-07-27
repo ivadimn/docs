@@ -8,14 +8,13 @@ from datetime import date
 class Org(Entity):
     code: str
     name: str
-    code_word: Optional[str]
     parent_id: Optional[int]
     created_at: str
     closed_at: Optional[str] = None
     child: Optional[list] = None
 
     def row(self) -> tuple:
-        return str(self.id), self.code, self.name, self.code_word, str(self.parent_id)
+        return str(self.id), self.code, self.name, str(self.parent_id)
 
     def __eq__(self, other: "Org"):
         return self.name.upper() == other.name.upper()
@@ -34,3 +33,13 @@ class Org(Entity):
         if len(codes) < 3:
             return codes[0]
         return "/".join(codes[:-1])
+
+
+@dataclass
+class OrgForLoading:
+    code: str
+    name: str
+    parent_code: str
+
+    def __eq__(self, other):
+        return self.name == other.name and self.code == other.code

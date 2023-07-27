@@ -6,27 +6,27 @@ from model_data.org import Org
 
 class OrgRepository(Repository):
     _SELECT_ONE = """
-        SELECT id, code, name, code_word, parent_id, created_at FROM org WHERE id=?; """
+        SELECT id, code, name, parent_id, created_at FROM org WHERE id=?; """
     _SELECT_BY_CODE = """
-           SELECT id, code, name, code_word, parent_id, created_at FROM org WHERE code=?; """
+           SELECT id, code, name, parent_id, created_at FROM org WHERE code=?; """
     _SELECT_LEVEL_CHILD = """ S
-        ELECT id, code, name, code_word, parent_id, created_at FROM org WHERE parent_id=?; """
+        ELECT id, code, name, parent_id, created_at FROM org WHERE parent_id=?; """
     _SELECT_FIRST_LEVEL = """
-        SELECT id, code, name, code_word, parent_id, created_at 
+        SELECT id, code, name, parent_id, created_at 
         FROM org 
         WHERE parent_id is NULL and closed_at is NULL ; """
     _SELECT_TREE = """
-        SELECT id, code, name, code_word, parent_id, created_at 
+        SELECT id, code, name, parent_id, created_at 
         FROM org 
         WHERE parent_id = ? and closed_at is NULL ; """
     _SELECT = """
-            SELECT id, code, name, code_word, parent_id, created_at 
+            SELECT id, code, name, parent_id, created_at 
             FROM org 
             WHERE closed_at is NULL ; """
     _SELECT_PARENTS = """
         SELECT parent_id FROM tree_path WHERE child_id = ? ;
     """
-    _INSERT = "INSERT INTO org (code, name, code_word, parent_id, created_at, closed_at) VALUES(?, ?, ?, ?, ?, ?); "
+    _INSERT = "INSERT INTO org (code, name, parent_id, created_at, closed_at) VALUES(?, ?, ?, ?, ?); "
     _INSERT_TREE_PATH = "INSERT INTO tree_path (parent_id, child_id) VALUES(?, ?) ; "
     _DELETE = "DELETE FROM org WHERE id=?; "
 
@@ -37,7 +37,7 @@ class OrgRepository(Repository):
         query.exec()
         if query.first():
             return Org(query.value("id"), query.value("code"), query.value("name"),
-                       query.value("code_word"), query.value("parent-id"), query.value("created_at"))
+                       query.value("parent-id"), query.value("created_at"))
         else:
             return None
 
@@ -48,7 +48,7 @@ class OrgRepository(Repository):
         query.exec()
         if query.first():
             return Org(query.value("id"), query.value("code"), query.value("name"),
-                       query.value("code_word"), query.value("parent_id"), query.value("created_at"))
+                       query.value("parent_id"), query.value("created_at"))
         else:
             return None
 
@@ -86,7 +86,7 @@ class OrgRepository(Repository):
         orgs = list()
         while query.next():
             orgs.append(Org(query.value("id"), query.value("code"), query.value("name"),
-                            query.value("code_word"), query.value("parent_id"), query.value("created_at")))
+                            query.value("parent_id"), query.value("created_at")))
         return orgs
 
     def __insert_tree_path(self, parent_id: int, child_id: int) -> None:
@@ -111,7 +111,6 @@ class OrgRepository(Repository):
             print(org.row())
             query.addBindValue(org.code)
             query.addBindValue(org.name.upper())
-            query.addBindValue(org.code_word)
             query.addBindValue(org.parent_id)
             query.addBindValue(org.created_at)
             query.addBindValue(org.closed_at)

@@ -2,7 +2,6 @@ CREATE TABLE "org" (
     "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
     "code" TEXT NOT NULL,
     "name"  TEXT NOT NULL,
-    "code_word" TEXT,
     "parent_id" INT,
     "created_at" TEXT NOT NULL,
     "closed_at" TEXT
