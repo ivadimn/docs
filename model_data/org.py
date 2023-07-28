@@ -43,3 +43,12 @@ class OrgForLoading:
 
     def __eq__(self, other):
         return self.name == other.name and self.code == other.code
+
+    def clear(self):
+        self.code = ""
+        self.name = ""
+        self.parent_code = ""
+
+    def is_empty(self):
+        return self.code == "" and self.name == ""
+
