@@ -39,7 +39,7 @@ class Org(Entity):
 class OrgForLoading:
     code: str
     name: str
-    parent_code: str
+    parent_name: str
 
     def __eq__(self, other):
         return self.name == other.name and self.code == other.code
@@ -47,7 +47,7 @@ class OrgForLoading:
     def clear(self):
         self.code = ""
         self.name = ""
-        self.parent_code = ""
+        self.parent_name = ""
 
     def is_empty(self):
         return self.code == "" and self.name == ""

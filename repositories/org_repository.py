@@ -2,13 +2,15 @@ from PyQt6.QtSql import QSqlQuery
 from typing import Optional, List
 from repositories.repository import Repository
 from model_data.org import Org
+from datetime import date
+from settings import date_format
 
 
 class OrgRepository(Repository):
     _SELECT_ONE = """
         SELECT id, code, name, parent_id, created_at FROM org WHERE id=?; """
-    _SELECT_BY_CODE = """
-           SELECT id, code, name, parent_id, created_at FROM org WHERE code=?; """
+    _SELECT_BY_NAME = """
+           SELECT id, code, name, parent_id, created_at FROM org WHERE name=?; """
     _SELECT_LEVEL_CHILD = """ S
         ELECT id, code, name, parent_id, created_at FROM org WHERE parent_id=?; """
     _SELECT_FIRST_LEVEL = """
@@ -41,9 +43,9 @@ class OrgRepository(Repository):
         else:
             return None
 
-    def select_by_code(self, code: str) -> Optional[Org]:
+    def select_by_name(self, code: str) -> Optional[Org]:
         query = QSqlQuery()
-        query.prepare(self._SELECT_BY_CODE)
+        query.prepare(self._SELECT_BY_NAME)
         query.addBindValue(code)
         query.exec()
         if query.first():
@@ -110,9 +112,9 @@ class OrgRepository(Repository):
         for org in entities:
             print(org.row())
             query.addBindValue(org.code)
-            query.addBindValue(org.name.upper())
+            query.addBindValue(org.name)
             query.addBindValue(org.parent_id)
-            query.addBindValue(org.created_at)
+            query.addBindValue(date.today().strftime(date_format))
             query.addBindValue(org.closed_at)
             query.exec()
             rid = query.lastInsertId()
