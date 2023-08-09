@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 @dataclass()
 class Entity(ABC):
-    id: int
+    pk: int = None
 
     @abstractmethod
     def row(self) -> tuple: ...

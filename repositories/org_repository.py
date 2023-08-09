@@ -73,7 +73,7 @@ class OrgRepository(Repository):
         query.exec()
         orgs = self.__extract_data(query)
         for org in orgs:
-            params["parent_id"] = org.id
+            params["parent_id"] = org.pk
             org.child = self.select(params)
         return orgs
 

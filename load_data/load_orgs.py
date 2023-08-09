@@ -93,7 +93,7 @@ class LoadOrgs:
                 rid = rep.insert([lorg])
             else:
                 parent_org = rep.select_by_name(dep.parent_name)
-                lorg.parent_id = parent_org.id
+                lorg.parent_id = parent_org.pk
                 rep.insert([lorg])
 
     def first_load(self):

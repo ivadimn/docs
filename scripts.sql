@@ -71,3 +71,27 @@ CREATE UNIQUE INDEX "goal_code_IDX" ON "goal" (
 CREATE UNIQUE INDEX "goal_name_IDX" ON "goal" (
 	"name"
 );
+
+CREATE TABLE "dep" (
+    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+    "code" TEXT NOT NULL,
+    "name"  TEXT NOT NULL,
+    "created_at" TEXT NOT NULL,
+    "closed_at" TEXT
+);
+CREATE UNIQUE INDEX "dep_code_IDX" ON "dep" (
+	"code"
+);
+CREATE UNIQUE INDEX "dep_name_IDX" ON "dep" (
+	"name"
+);
+
+CREATE TABLE "dep_word" (
+    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+    "dep_id" INTEGER NOT NULL,
+    "code_word"  TEXT NULL,
+    CONSTRAINT dep_word_dep_id_FK FOREIGN KEY (dep_id) REFERENCES dep(id)
+);
+
+
+

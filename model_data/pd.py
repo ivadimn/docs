@@ -8,5 +8,5 @@ class Pd(Entity):
     comment: str
 
     def row(self) -> tuple:
-        return str(self.id), self.name, self.comment
+        return str(self.pk), self.name, self.comment
 

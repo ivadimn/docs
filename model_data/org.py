@@ -14,7 +14,7 @@ class Org(Entity):
     child: Optional[list] = None
 
     def row(self) -> tuple:
-        return str(self.id), self.code, self.name, str(self.parent_id)
+        return str(self.pk), self.code, self.name, str(self.parent_id)
 
     def __eq__(self, other: "Org"):
         return self.name.upper() == other.name.upper()
