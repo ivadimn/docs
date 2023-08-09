@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QMainWindow, QMessageBox, QFileDialog, QApplication
 from PyQt6.QtCore import pyqtSlot, Qt
 from ui.main_menu import MainMenu
 from load_data.load_orgs import LoadOrgs
+from load_data.load_simple import LoadSimple
 from repositories.org_repository import TreeRepository
 
 
@@ -46,6 +47,7 @@ class MainWindow(QMainWindow):
         self.setMenuBar(main_menu)
 
         main_menu.orgs.triggered.connect(self.load_orgs)
+        main_menu.deps.triggered.connect(self.load_simple)
 
         main_menu.about_qt.triggered.connect(self.about_qt)
         main_menu.about.triggered.connect(self.about)
@@ -60,7 +62,6 @@ class MainWindow(QMainWindow):
     def about_qt(self):
         QMessageBox.aboutQt(self, "Цифровые нормативные документы")
 
-
     @pyqtSlot()
     def load_orgs(self):
         file_dlg = QFileDialog(self, Qt.WindowType.Dialog)
@@ -71,4 +72,13 @@ class MainWindow(QMainWindow):
             load = LoadOrgs(file_name)
             load.load_orgs()
 
+    @pyqtSlot()
+    def load_simple(self):
+        file_dlg = QFileDialog(self, Qt.WindowType.Dialog)
+        file_dlg.setAcceptMode(QFileDialog.AcceptMode.AcceptOpen)
+        file_dlg.setNameFilter("Excel files (*.xls *.xlsx)")
+        if file_dlg.exec():
+            file_name = file_dlg.selectedFiles()[0]
+            load = LoadSimple(file_name)
+            load.update_db_deps()
 

@@ -13,6 +13,7 @@ class MainMenu(QMenuBar):
 
         load_menu = self.addMenu("Загрузка данных")
         self.__orgs = load_menu.addAction("Организационные единицы ...")
+        self.__deps = load_menu.addAction("Департаменты ...")
         self.__faces = load_menu.addAction("Лица ...")
         self.__tn = load_menu.addAction("Табельные номера ...")
 
@@ -23,6 +24,10 @@ class MainMenu(QMenuBar):
     @property
     def orgs(self):
         return self.__orgs
+
+    @property
+    def deps(self):
+        return self.__deps
 
     @property
     def faces(self):

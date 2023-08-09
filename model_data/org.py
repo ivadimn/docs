@@ -6,10 +6,10 @@ from datetime import date
 
 @dataclass
 class Org(Entity):
-    code: str
-    name: str
-    parent_id: Optional[int]
-    created_at: str
+    code: str = None
+    name: str = None
+    parent_id: Optional[int] = None
+    created_at: str = None
     closed_at: Optional[str] = None
     child: Optional[list] = None
 

@@ -20,6 +20,6 @@ class Dep(Entity):
     def extract_code(self):
         nc = self.name.strip().split(" ")
         if len(nc) == 1:
-            return nc[0]
+            self.code = nc[0]
         else:
-            return nc[-1]
+            self.code = nc[-1]

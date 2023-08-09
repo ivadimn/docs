@@ -9,7 +9,6 @@ class LoadSimple:
 
     def __init__(self, file_name: str):
         self.deps: List[Dep] = list()
-        self.orgs = list()
         self.__load_deps(file_name)
 
     def __load_deps(self, file_name: str):
@@ -30,4 +29,10 @@ class LoadSimple:
 
     def update_db_deps(self):
         rep = DepRepository()
-        self.orgs = rep.select()
+        orgs = rep.select()
+        for dep in self.deps:
+            if dep not in orgs:
+                rep.insert([dep])
+        for org in orgs:
+            if org not in self.deps:
+                rep.delete({"pk": org.pk})

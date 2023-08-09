@@ -1,4 +1,4 @@
-from PyQt6.QtSql import QSqlQuery
+from PyQt6.QtSql import QSqlQuery, QSqlDatabase
 from typing import Optional, List
 from repositories.repository import Repository
 from model_data.dep import Dep
@@ -10,15 +10,15 @@ from db.connection import Connection
 class DepRepository(Repository):
 
     _SELECT_ONE = """
-            SELECT id, code, name, created_at, closed_at FROM org WHERE id=?; """
+            SELECT id, code, name, created_at, closed_at FROM dep WHERE id=?; """
     _SELECT_BY_NAME = """
-               SELECT id, code, name, created_at, closed_at FROM org WHERE name=?; """
+               SELECT id, code, name, created_at, closed_at FROM dep WHERE name=?; """
     _SELECT = """
                 SELECT id, code, name, created_at 
-                FROM org 
+                FROM dep 
                 WHERE closed_at is NULL ; """
 
-    _INSERT = "INSERT INTO dep (code, name, created_at, closed_at) VALUES(?, ?, ?, ?, ?); "
+    _INSERT = "INSERT INTO dep (code, name, created_at, closed_at) VALUES(?, ?, ?, ?); "
     _INSERT_WORD = "INSERT INTO dep_word (dep_id, code_word) VALUES(?, ?) ; "
     _DELETE = "UPDATE dep SET closed_at = ? WHERE id=?; "
     _UPDATE = "UPDATE dep_word SET code_word=? WHERE id=? ; "
@@ -62,8 +62,6 @@ class DepRepository(Repository):
     def insert(self, entities: List[Dep]) -> int:
         query = QSqlQuery()
         query.prepare(self._INSERT)
-        conn = Connection().connection
-        conn.transaction()
         pk = 0
         for dep in entities:
             print(dep.row())
@@ -73,15 +71,9 @@ class DepRepository(Repository):
             query.addBindValue(dep.closed_at)
             if query.exec():
                 pk = query.lastInsertId()
-                if self.__insert_dep_word(pk):
-                    conn.commit()
-                else:
-                    conn.rollback()
-                    print(query.lastError().text())
+                self.__insert_dep_word(pk)
             else:
-                conn.rollback()
                 print(query.lastError().text())
-
         return pk
 
     def delete(self, params: dict) -> None:
