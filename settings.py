@@ -7,3 +7,4 @@ db_params = {
 }
 
 date_format = "%Y-%m-%d"
+birthday_format = "%d.%m.%Y"

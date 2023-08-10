@@ -1,4 +1,4 @@
-from PyQt6.QtSql import QSqlQuery, QSqlDatabase
+from PyQt6.QtSql import QSqlQuery
 from typing import Optional, List
 from repositories.repository import Repository
 from model_data.dep import Dep
@@ -17,6 +17,13 @@ class DepRepository(Repository):
                 SELECT id, code, name, created_at 
                 FROM dep 
                 WHERE closed_at is NULL ; """
+
+    INSERT_DEP = """
+        BEGIN TRANSACTION;
+            INSERT INTO dep (code, name, created_at, closed_at) VALUES(?, ?, ?, ?); 
+            INSERT INTO dep_word (dep_id, code_word) VALUES(?, ?) ;
+        COMMIT TRANSACTION;
+    """
 
     _INSERT = "INSERT INTO dep (code, name, created_at, closed_at) VALUES(?, ?, ?, ?); "
     _INSERT_WORD = "INSERT INTO dep_word (dep_id, code_word) VALUES(?, ?) ; "

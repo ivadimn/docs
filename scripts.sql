@@ -93,5 +93,16 @@ CREATE TABLE "dep_word" (
     CONSTRAINT dep_word_dep_id_FK FOREIGN KEY (dep_id) REFERENCES dep(id)
 );
 
+CREATE TABLE "face" (
+    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+    "snils" TEXT NOT NULL,
+    "birthday"  TEXT NOT NULL
+);
+CREATE UNIQUE INDEX "face_snils_IDX" ON "face" ("snils");
 
-
+CREATE TABLE "tmp_face" (
+    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+    "snils" TEXT NOT NULL,
+    "birthday"  TEXT NOT NULL
+);
+CREATE UNIQUE INDEX "tmp_face_snils_IDX" ON "tmp_face" ("snils");
