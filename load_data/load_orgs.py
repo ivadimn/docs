@@ -40,7 +40,7 @@ class LoadOrgs:
             if org.name == "Руководство":
                 org.code = "1"
             elif org.name == "Аппарат Правления":
-                org.code = 200
+                org.code = "200"
             else:
                 org.code = Org.extract_code(org.name)
             if index == 1:
@@ -79,7 +79,7 @@ class LoadOrgs:
     #     return org
 
     def __is_empty_Line(self, vals) -> bool:
-        result = all([pd.isna(val) for val in vals]) or (pd.notna(vals[0]))
+        result = all([pd.isna(val) for val in vals])       # or (pd.notna(vals[0]))
         return result
 
     def load_orgs(self):

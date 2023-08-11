@@ -2,6 +2,7 @@ from PyQt6.QtSql import QSqlQuery
 from typing import Optional, List
 from repositories.repository import Repository
 from model_data.org import Org
+from model_data.dep import Dep
 from datetime import date
 from settings import date_format
 
@@ -105,6 +106,14 @@ class OrgRepository(Repository):
         orgs = self.__extract_data(query)
         return orgs
 
+    def select_first_level(self) -> List[Org]:
+        query = QSqlQuery()
+        query.prepare(self._SELECT_FIRST_LEVEL)
+        query.exec()
+        orgs = self.__extract_data(query)
+        return orgs
+
+
     def insert(self, entities: List[Org]) -> int:
         query = QSqlQuery()
         query.prepare(self._INSERT)
@@ -131,6 +140,10 @@ class OrgRepository(Repository):
         query = QSqlQuery()
         query.prepare(self._DELETE)
         query.exec()
+
+    def update(self, orgs: List[Dep]):
+        orgs = self.select_first_level()
+
 
 
 class TreeRepository(Repository):

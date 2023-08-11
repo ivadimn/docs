@@ -1,5 +1,6 @@
+import pandas as pd
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, List
 from model_data.entity import Entity
 from datetime import date
 
@@ -8,18 +9,12 @@ from datetime import date
 class Dep(Entity):
     code: str = None
     name: str = None
-    created_at: str = None
-    closed_at: str = None
+    parent_code: str = None
+    childs: List["Dep"] = None
 
     def row(self) -> tuple:
-        return self.pk, self.code, self.name, self.created_at, self.closed_at
+        return self.pk, self.code, self.name,
 
     def __eq__(self, other: "Dep"):
         return self.name.upper() == other.name.upper()
 
-    def extract_code(self):
-        nc = self.name.strip().split(" ")
-        if len(nc) == 1:
-            self.code = nc[0]
-        else:
-            self.code = nc[-1]

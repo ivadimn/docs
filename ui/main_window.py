@@ -4,6 +4,7 @@ from ui.main_menu import MainMenu
 from load_data.load_orgs import LoadOrgs
 from load_data.load_simple import LoadSimple
 from load_data.load_faces import LoadFaces
+from load_data.import_data import ImportData
 from repositories.org_repository import TreeRepository
 
 
@@ -81,8 +82,9 @@ class MainWindow(QMainWindow):
         file_dlg.setNameFilter("Excel files (*.xls *.xlsx)")
         if file_dlg.exec():
             file_name = file_dlg.selectedFiles()[0]
-            load = LoadSimple(file_name)
-            load.update_db_deps()
+            # load = LoadSimple(file_name)
+            # load.update_db_deps()
+            load = ImportData(file_name)
 
     @pyqtSlot()
     def load_faces(self):
