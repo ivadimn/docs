@@ -25,25 +25,13 @@ CREATE TABLE "org_tree" (
     CONSTRAINT org_tree_parent_id_FK FOREIGN KEY (parent_id) REFERENCES org(id)
 );
 
-
-
-CREATE TABLE "face" (
-	"id"	INTEGER PRIMARY KEY AUTOINCREMENT,
-	"snils"	TEXT NOT NULL,
-	"inn"	TEXT NOT NULL,
-	"birthday" TEXT NOT NULL
-);
-CREATE UNIQUE INDEX "face_snils_IDX" ON "face" ("snils" );
-CREATE UNIQUE INDEX "face_inn_IDX" ON "face" ("inn" );
-
 CREATE TABLE "pd" (
 	"id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+	"firstname"	TEXT NOT NULL,
 	"name"	TEXT NOT NULL,
-	"comment"	TEXT
-);
-
-CREATE UNIQUE INDEX "pd_name_IDX" ON "pd" (
-	"name"
+	"fathername" TEXT,
+	"created_at" TEXT NOT NULL,
+	"closed_at" TEXT
 );
 
 CREATE TABLE "category" (

@@ -1,10 +1,9 @@
 import pandas as pd
 from model_data.sap_data import SapData
-from model_data.org import Org
 from typing import List
-from model_data.face import Face
-from settings import birthday_format
 from .utils import  extract_org_list
+from load_data.load_orgs import LoadOrgs
+from load_data.load_faces import LoadFaces
 from pprint import pprint
 
 
@@ -18,13 +17,15 @@ class ImportData:
         excel_data = pd.read_excel(filename)
         data = pd.DataFrame(excel_data)
         data_orgs = data.iloc[:, [6, 7, 8]]
-        print(data_orgs)
         # for val in data.values:
         #     self.sap_data.append(SapData(0, val[0], val[1], val[2].strftime(birthday_format),
         #                                  val[3], val[4], val[5],
         #                                  val[6] if pd.notna(val[6]) else "Руководство",
         #                                  val[7], val[8]))
         # self.prepare_orgs()
+        # load_orgs = LoadOrgs(data_orgs)
+        # load_orgs.load_orgs()
+        load_faces = LoadFaces(data)
 
     def prepare_orgs(self):
         orgs = extract_org_list([sap.dep for sap in self.sap_data])

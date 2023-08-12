@@ -2,9 +2,7 @@ import sys
 from application import Application
 from ui.main_window import MainWindow
 from db.connection import Connection
-from  repositories.org_repository import OrgRepository
-from repositories.pd_repository import PdRepository
-from model_data.pd import Pd
+
 
 if __name__ == '__main__':
     app = Application(sys.argv)

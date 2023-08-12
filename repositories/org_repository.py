@@ -113,13 +113,12 @@ class OrgRepository(Repository):
         orgs = self.__extract_data(query)
         return orgs
 
-
     def insert(self, entities: List[Org]) -> int:
         query = QSqlQuery()
         query.prepare(self._INSERT)
         rid = 0
         for org in entities:
-            print(org.row())
+            # print(org.row())
             query.addBindValue(org.code)
             query.addBindValue(org.name)
             query.addBindValue(org.parent_id)

@@ -15,6 +15,7 @@ class FaceRepository(Repository):
         WHERE snils not in ( SELECT snils FROM face) ; 
     """
     _INSERT_TMP = "INSERT INTO tmp_face (snils, birthday) VALUES (?, ?) ; "
+    _INSERT_ONE = "INSERT INTO face (snils, birthday) VALUES (?, ?) ; "
     _DELETE_TMP = "DELETE FROM tmp_face ; "
 
     def __extract_data(self, query: QSqlQuery) -> List[Face]:
@@ -43,13 +44,12 @@ class FaceRepository(Repository):
             print("Insert into tmp error: {0}".format(query.lastError().text()))
             return False
 
-    def insert(self, faces: List[Face]) -> int:
+    def insert(self, faces: List[Face], org_id: int = None) -> int:
         if not self.__insert_tmp(faces):
             return 0
-        query = QSqlQuery(self._INSERT)
+        query = QSqlQuery(self._INSERT_ONE)
         if query.exec():
-            self.delete()
-            return query.lastInsertId()
+            pk = query.lastInsertId()
         else:
             print("Insert into face error: {0}".format(query.lastError().text()))
             return 0
