@@ -23,8 +23,8 @@ class ImportData:
         #                                  val[6] if pd.notna(val[6]) else "Руководство",
         #                                  val[7], val[8]))
         # self.prepare_orgs()
-        # load_orgs = LoadOrgs(data_orgs)
-        # load_orgs.load_orgs()
+        #load_orgs = LoadOrgs(data_orgs)
+        #load_orgs.load_orgs()
         load_faces = LoadFaces(data)
 
     def prepare_orgs(self):
