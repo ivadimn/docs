@@ -80,18 +80,20 @@ class MainWindow(QMainWindow):
         file_dlg = QFileDialog(self, Qt.WindowType.Dialog)
         file_dlg.setAcceptMode(QFileDialog.AcceptMode.AcceptOpen)
         file_dlg.setNameFilter("Excel files (*.xls *.xlsx)")
-        if file_dlg.exec():
-            file_name = file_dlg.selectedFiles()[0]
+        if not file_dlg.exec():
+            return
+        file_name = file_dlg.selectedFiles()[0]
             # load = LoadSimple(file_name)
             # load.update_db_deps()
-            load = ImportData(file_name)
+        load = ImportData(file_name)
 
     @pyqtSlot()
     def load_faces(self):
         file_dlg = QFileDialog(self, Qt.WindowType.Dialog)
         file_dlg.setAcceptMode(QFileDialog.AcceptMode.AcceptOpen)
         file_dlg.setNameFilter("Excel files (*.xls *.xlsx)")
-        if file_dlg.exec():
-            file_name = file_dlg.selectedFiles()[0]
-            load = LoadFaces(file_name)
-            load.update_db_faces()
+        if not file_dlg.exec():
+            return
+        file_name = file_dlg.selectedFiles()[0]
+        load = LoadFaces(file_name)
+        load.update_db_faces()

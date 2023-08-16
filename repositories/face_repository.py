@@ -8,15 +8,15 @@ from settings import birthday_format
 
 class FaceRepository(Repository):
     _SELECT = "SELECT id, snils, birthday FROM face ; "
-    _INSERT = """
+    _INSERT_PD = """
         INSERT INTO face (snils, birthday) 
         SELECT snils, birthday 
         FROM tmp_face
         WHERE snils not in ( SELECT snils FROM face) ; 
     """
-    _INSERT_TMP = "INSERT INTO tmp_face (snils, birthday) VALUES (?, ?) ; "
-    _INSERT_ONE = "INSERT INTO face (snils, birthday) VALUES (?, ?) ; "
-    _DELETE_TMP = "DELETE FROM tmp_face ; "
+    _INSERT_TMP = " INSERT INTO tmp_face (snils, tn, firstname, name, fathername) VALUES (?, ?, ?, ?, ?) ; "
+    _INSERT_ONE = " INSERT INTO face (snils, birthday) VALUES (?, ?) ; "
+    _DELETE_TMP = " DELETE FROM tmp_face ; "
 
     def __extract_data(self, query: QSqlQuery) -> List[Face]:
         faces = list()
@@ -34,25 +34,28 @@ class FaceRepository(Repository):
     def __insert_tmp(self, faces: List[Face]) -> bool:
         query = QSqlQuery()
         query.prepare(self._INSERT_TMP)
-        list_snils = [face.snils for face in faces]
-        list_birthday = [face.birthday for face in faces]
-        query.addBindValue(list_snils)
-        query.addBindValue(list_birthday)
+        query.addBindValue([face.snils for face in faces])
+        query.addBindValue([face.tn for face in faces])
+        query.addBindValue([face.fio[0] for face in faces])
+        query.addBindValue([face.fio[1] for face in faces])
+        query.addBindValue([face.fio[2] for face in faces])
         if query.execBatch(QSqlQuery.BatchExecutionMode.ValuesAsRows):
             return True
         else:
             print("Insert into tmp error: {0}".format(query.lastError().text()))
             return False
 
-    def insert(self, faces: List[Face], org_id: int = None) -> int:
+    def insert(self, faces: List[Face], orgs: List[int] = None) -> int:
         if not self.__insert_tmp(faces):
             return 0
-        query = QSqlQuery(self._INSERT_ONE)
-        if query.exec():
-            pk = query.lastInsertId()
-        else:
+        query = QSqlQuery()
+        query.prepare(self._INSERT_ONE)
+        if not query.exec():
             print("Insert into face error: {0}".format(query.lastError().text()))
             return 0
+        if self.__insert_tmp(faces):
+            pass
+            #insert pd
 
     def select_one(self, rid: int) -> Face:
         pass

@@ -23,9 +23,11 @@ class ImportData:
         #                                  val[6] if pd.notna(val[6]) else "Руководство",
         #                                  val[7], val[8]))
         # self.prepare_orgs()
-        #load_orgs = LoadOrgs(data_orgs)
-        #load_orgs.load_orgs()
+        load_orgs = LoadOrgs(data_orgs)
+        load_orgs.load_orgs()
+        print("Структура загружена!!!")
         load_faces = LoadFaces(data)
+        load_faces.update_db_faces()
 
     def prepare_orgs(self):
         orgs = extract_org_list([sap.dep for sap in self.sap_data])

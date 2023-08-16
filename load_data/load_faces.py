@@ -29,7 +29,6 @@ class LoadFaces:
 
             self.orgs[org_name].append(Face(0, val[0], val[1], val[2].strftime(birthday_format),
                                             (val[3], val[4], val[5])))
-        print(self.orgs)
 
     def update_db_faces(self):
         print("Now updating list faces ...")
@@ -43,8 +42,7 @@ class LoadFaces:
                 if face not in ex_faces:
                     faces.append(face)
                 if len(faces) > 0:
-                    rep.insert(faces, org_id)
-
+                    rep.insert(faces, [org_id for _ in range(len(faces))])
         print("Update list faces was finished!")
 
 

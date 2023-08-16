@@ -43,8 +43,10 @@ CREATE TABLE "pd" (
 );
 
 CREATE TABLE "tmp_face" (
-    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
-    "snils" TEXT NOT NULL,
-    "birthday"  TEXT NOT NULL
+    "snils" TEXT PRIMARY KEY
+    "tn"	INTEGER NOT NULL,
+    "firstname"	TEXT NOT NULL,
+	"name"	TEXT NOT NULL,
+	"fathername" TEXT,
 );
-CREATE UNIQUE INDEX "tmp_face_snils_IDX" ON "tmp_face" ("snils");
+
