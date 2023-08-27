@@ -16,15 +16,11 @@ class ImportData:
     def __load_data(self, filename: str):
         excel_data = pd.read_excel(filename)
         data = pd.DataFrame(excel_data)
-        data_orgs = data.iloc[:, [6, 7, 8]]
-        # for val in data.values:
-        #     self.sap_data.append(SapData(0, val[0], val[1], val[2].strftime(birthday_format),
-        #                                  val[3], val[4], val[5],
-        #                                  val[6] if pd.notna(val[6]) else "Руководство",
-        #                                  val[7], val[8]))
-        # self.prepare_orgs()
+        data_orgs = data.iloc[:, [6, 7, 8]]     # выделяем столбцы со структурой
+
         load_orgs = LoadOrgs(data_orgs)
         load_orgs.load_orgs()
+
         print("Структура загружена!!!")
         load_faces = LoadFaces(data)
         load_faces.update_db_faces()

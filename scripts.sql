@@ -1,3 +1,5 @@
+
+# таблицы хранение органиизационной структуры
 CREATE TABLE "org" (
     "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
     "code" TEXT NOT NULL,

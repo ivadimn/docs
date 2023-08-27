@@ -9,24 +9,15 @@ from pprint import pprint
 class LoadOrgs:
 
     def __init__(self, data: DataFrame):
-        self.deps: List[OrgForLoading] = list()
+        self.raw_orgs: List[OrgForLoading] = list()
         self.data = data
         self.orgs: List[Org] = list()
         self.__load_deps()
 
+# анализ файла производиться по колонкам
     def __load_deps(self):
         for index in range(self.data.shape[1]):
             self.__analyze_column(index)
-        # for val in data.values:
-        #     #print([elem for elem in val])
-        #     if pd.notna(val[0]) or self.__is_empty_Line(val):
-        #         continue
-        #     org = self.__analyze_line(val)
-        #     if org.is_empty():
-        #         continue
-        #     if org not in self.deps:
-        #         self.deps.append(org)
-        #pprint(self.deps)
 
     def __analyze_column(self, index: int):
         org = OrgForLoading("", "", "")
@@ -54,9 +45,9 @@ class LoadOrgs:
             self.__append_to_dep(org)
 
     def __append_to_dep(self, org: OrgForLoading):
-        if org not in self.deps:
+        if org not in self.raw_orgs:
             add_org = OrgForLoading(org.code, org.name, org.parent_name)
-            self.deps.append(add_org)
+            self.raw_orgs.append(add_org)
 
     def __is_empty_Line(self, vals) -> bool:
         result = all([isna(val) for val in vals])       # or (pd.notna(vals[0]))
@@ -65,7 +56,7 @@ class LoadOrgs:
     def load_orgs(self):
         rep = OrgRepository()
         self.orgs = rep.select()
-        for dep in self.deps:
+        for dep in self.raw_orgs:
             lorg = Org(0, dep.code, dep.name, None, "")
             if lorg in self.orgs:
                 continue
@@ -76,3 +67,5 @@ class LoadOrgs:
                 lorg.parent_id = parent_org.pk
                 rep.insert([lorg])
 
+# добавить фуйкцию анализ структуры для закрытия
+# закрывается единица и все дочерние узлы и привязка к должностмя
