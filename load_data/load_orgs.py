@@ -13,11 +13,13 @@ class LoadOrgs:
         self.data = data
         self.orgs: List[Org] = list()
         self.__load_deps()
+        print("Департаменты загружены!")
 
 # анализ файла производиться по колонкам
     def __load_deps(self):
         for index in range(self.data.shape[1]):
             self.__analyze_column(index)
+            print("Обработана колонка {0}!".format(index))
 
     def __analyze_column(self, index: int):
         org = OrgForLoading("", "", "")
@@ -56,16 +58,31 @@ class LoadOrgs:
     def load_orgs(self):
         rep = OrgRepository()
         self.orgs = rep.select()
+        orgs_cache = dict()
+        if len(self.orgs) > 0:
+            orgs_cache.update({o.name: o for o in self.orgs})
         for dep in self.raw_orgs:
             lorg = Org(0, dep.code, dep.name, None, "")
             if lorg in self.orgs:
                 continue
             if dep.parent_name == "":
                 pk = rep.insert([lorg])
+                lorg.pk = pk
             else:
-                parent_org = rep.select_by_name(dep.parent_name)
+                # parent_org = rep.select_by_name(dep.parent_name)
+                parent_org = orgs_cache[dep.parent_name]
                 lorg.parent_id = parent_org.pk
-                rep.insert([lorg])
+                pk = rep.insert([lorg])
+                lorg.pk = pk
+            orgs_cache[lorg.name] = lorg
+        self.__close_orgs()
+
+    def __close_orgs(self):
+        rep = OrgRepository()
+        pks = [o.pk for o in self.orgs if OrgForLoading(code=o.code, name=o.name) not in self.raw_orgs]
+        rep.close(pks)
+
+
 
 # добавить фуйкцию анализ структуры для закрытия
 # закрывается единица и все дочерние узлы и привязка к должностмя

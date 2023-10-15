@@ -19,6 +19,9 @@ class Org(Entity):
     def __eq__(self, other: "Org"):
         return self.name.upper() == other.name.upper()
 
+    def __str__(self):
+        return "{0} {1} parent_id: {2}".format(self.code, self.name, self.parent_id)
+
     @classmethod
     def extract_code(cls, name: str) -> str:
         nc = name.strip().split(" ")
@@ -37,9 +40,9 @@ class Org(Entity):
 
 @dataclass
 class OrgForLoading:
-    code: str
-    name: str
-    parent_name: str
+    code: str = None
+    name: str = None
+    parent_name: str = None
 
     def __eq__(self, other):
         return self.name == other.name and self.code == other.code

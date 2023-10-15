@@ -5,6 +5,7 @@ from load_data.load_orgs import LoadOrgs
 from load_data.load_simple import LoadSimple
 from load_data.load_faces import LoadFaces
 from load_data.import_data import ImportData
+from ui.views.orgs_view import OrgsView
 from repositories.org_repository import TreeRepository
 
 
@@ -67,13 +68,8 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot()
     def load_orgs(self):
-        file_dlg = QFileDialog(self, Qt.WindowType.Dialog)
-        file_dlg.setAcceptMode(QFileDialog.AcceptMode.AcceptOpen)
-        file_dlg.setNameFilter("Excel files (*.xls *.xlsx)")
-        if file_dlg.exec():
-            file_name = file_dlg.selectedFiles()[0]
-            load = LoadOrgs(file_name)
-            load.load_orgs()
+        view = OrgsView(parent=self)
+        self.setCentralWidget(view)
 
     @pyqtSlot()
     def load_simple(self):
@@ -83,6 +79,7 @@ class MainWindow(QMainWindow):
         if not file_dlg.exec():
             return
         file_name = file_dlg.selectedFiles()[0]
+        file_dlg.close()
             # load = LoadSimple(file_name)
             # load.update_db_deps()
         load = ImportData(file_name)

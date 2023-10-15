@@ -32,6 +32,7 @@ class OrgRepository(Repository):
     _INSERT = "INSERT INTO org (code, name, parent_id, created_at, closed_at) VALUES(?, ?, ?, ?, ?); "
     _INSERT_TREE_PATH = "INSERT INTO tree_path (parent_id, child_id) VALUES(?, ?) ; "
     _DELETE = "DELETE FROM org WHERE id=?; "
+    _CLOSE = "UPDATE org SET closed_at=? WHERE id=? ;"
 
     def select_one(self, rid: int) -> Optional[Org]:
         query = QSqlQuery()
@@ -142,6 +143,15 @@ class OrgRepository(Repository):
 
     def update(self, orgs: List[Dep]):
         orgs = self.select_first_level()
+
+    def close(self, pks: List[int]):
+        query = QSqlQuery()
+        query.prepare(self._CLOSE)
+        data = [date.today().strftime(date_format) for _ in pks]
+        query.addBindValue(data)
+        query.addBindValue(pks)
+        if not query.execBatch():
+            print(query.lastError().text())
 
 
 

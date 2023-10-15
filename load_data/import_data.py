@@ -19,11 +19,12 @@ class ImportData:
         data_orgs = data.iloc[:, [6, 7, 8]]     # выделяем столбцы со структурой
 
         load_orgs = LoadOrgs(data_orgs)
+        print("Начинаем запись в базу ...")
         load_orgs.load_orgs()
 
         print("Структура загружена!!!")
-        load_faces = LoadFaces(data)
-        load_faces.update_db_faces()
+        #load_faces = LoadFaces(data)
+        #load_faces.update_db_faces()
 
     def prepare_orgs(self):
         orgs = extract_org_list([sap.dep for sap in self.sap_data])
