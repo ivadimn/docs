@@ -1,12 +1,13 @@
 from PyQt6.QtCore import QAbstractItemModel, QObject, QModelIndex, Qt
 import typing
+from repositories.org_repository import OrgRepository
 
 
 class OrgModel(QAbstractItemModel):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self._columns = ("Код", "Наименование",)
+        self._columns = ("objectName", "chief", "data")
 
         self._root_item = QObject(self)
 
@@ -39,11 +40,37 @@ class OrgModel(QAbstractItemModel):
     def data(self, index: QModelIndex, role: int = ...) -> typing.Any:
         if not index.isValid():
             return None
-        if role == Qt.ItemDataRole.DisplayRole:
+        if role == Qt.ItemDataRole.DisplayRole and index.column() < 2:
             return self.obj_by_index(index).property(self._columns[index.column()].encode("utf8"))
+        elif role == Qt.ItemDataRole.UserRole+0:
+            return self.obj_by_index(index).property("data")
         return None
 
     def obj_by_index(self, index: QModelIndex) -> QObject:
         if index is None or not index.isValid():
             return self._root_item
         return index.internalPointer()
+
+    def init_model(self) -> None:
+        rep = OrgRepository()
+        orgs = rep.select_first_level()
+        for org in orgs:
+            item = QObject()
+            item.setProperty("objectName", org.name)
+            item.setProperty("chief", "Chief")
+            item.setProperty("data", org)
+            self.add_item(item, QModelIndex())
+
+    def get_children(self, index: QModelIndex) -> None:
+        obj = self.obj_by_index(index)
+        if len(obj.children()) > 0:
+            return
+        parent_org = obj.property("data")
+        rep = OrgRepository()
+        orgs = rep.select_child(parent_org.pk)
+        for org in orgs:
+            item = QObject()
+            item.setProperty("objectName", org.name)
+            item.setProperty("chief", "Chief")
+            item.setProperty("data", org)
+            self.add_item(item, index)

@@ -52,3 +52,7 @@ CREATE TABLE "tmp_face" (
 	"fathername" TEXT,
 );
 
+CREATE VIEW org_view AS
+    SELECT o.id, o.name, "Chief name", o.parent_id
+    FROM org o
+    WHERE o.closed_at is NULL;

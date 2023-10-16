@@ -12,8 +12,8 @@ class OrgRepository(Repository):
         SELECT id, code, name, parent_id, created_at FROM org WHERE id=?; """
     _SELECT_BY_NAME = """
            SELECT id, code, name, parent_id, created_at FROM org WHERE name=?; """
-    _SELECT_LEVEL_CHILD = """ S
-        ELECT id, code, name, parent_id, created_at FROM org WHERE parent_id=?; """
+    _SELECT_LEVEL_CHILD = """ 
+        SELECT id, code, name, parent_id, created_at FROM org WHERE parent_id=?; """
     _SELECT_FIRST_LEVEL = """
         SELECT id, code, name, parent_id, created_at 
         FROM org 
@@ -83,7 +83,9 @@ class OrgRepository(Repository):
         query = QSqlQuery()
         query.prepare(self._SELECT_LEVEL_CHILD)
         query.addBindValue(parent_id)
-        query.exec()
+        if not query.exec():
+            print(query.lastError().text())
+            return []
         return self.__extract_data(query)
 
     def __extract_data(self, query: QSqlQuery) -> List[Org]:
