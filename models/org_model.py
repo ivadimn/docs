@@ -1,5 +1,8 @@
 from PyQt6.QtCore import QAbstractItemModel, QObject, QModelIndex, Qt
 import typing
+
+from PyQt6.QtGui import QBrush, QColor
+
 from repositories.org_repository import OrgRepository
 
 
@@ -44,6 +47,9 @@ class OrgModel(QAbstractItemModel):
             return self.obj_by_index(index).property(self._columns[index.column()].encode("utf8"))
         elif role == Qt.ItemDataRole.UserRole+0:
             return self.obj_by_index(index).property("data")
+        elif role == Qt.ItemDataRole.BackgroundRole:
+            if index.row() % 2 == 0:
+                return QBrush(Qt.GlobalColor.yellow)
         return None
 
     def obj_by_index(self, index: QModelIndex) -> QObject:

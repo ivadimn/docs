@@ -22,9 +22,7 @@ class OrgsView(QTreeView):
         self.setModel(self._model)
         self.hideColumn(2)
         self.setAlternatingRowColors(True)
-        header = QHeaderView(Qt.Orientation.Horizontal, self)
 
-        self.setHeader(header)
         self.org_selected.connect(self.select_child)
 
     def currentChanged(self, current: QModelIndex, previous: QModelIndex) -> None:
