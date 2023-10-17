@@ -13,6 +13,8 @@ class OrgModel(QAbstractItemModel):
         self._columns = ("objectName", "chief", "data")
 
         self._root_item = QObject(self)
+        self.setHeaderData(0, Qt.Orientation.Horizontal,  "Подразделение", Qt.ItemDataRole.DisplayRole)
+        self.setHeaderData(1, Qt.Orientation.Horizontal,  "Руководитель", Qt.ItemDataRole.DisplayRole)
 
     def add_item(self, item: QObject, parent_index: QModelIndex = None):
         self.beginInsertRows(parent_index, self.rowCount(parent_index), self.rowCount(parent_index))

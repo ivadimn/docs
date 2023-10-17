@@ -21,7 +21,9 @@ class OrgsView(QTreeView):
         self._model.init_model()
         self.setModel(self._model)
         self.hideColumn(2)
-        self.setAlternatingRowColors(True)
+        header = self.header()
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Interactive)
+        header.setStretchLastSection(True)
 
         self.org_selected.connect(self.select_child)
 
