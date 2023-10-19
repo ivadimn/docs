@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QTreeView, QHeaderView
 from PyQt6.QtCore import QObject, QModelIndex, Qt, pyqtSignal, pyqtSlot
+from PyQt6.QtGui import QStandardItemModel
 from models.org_model import OrgModel
 
 
@@ -21,12 +22,7 @@ class OrgsView(QTreeView):
         self._model.init_model()
         self.setModel(self._model)
         self.hideColumn(2)
-        header = self.header()
-        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Interactive)
-        header.setStretchLastSection(True)
-        model = header.model()
-        index = model.index(0, 0)
-        model.setData(index, "Header")
+
         self.org_selected.connect(self.select_child)
 
     def currentChanged(self, current: QModelIndex, previous: QModelIndex) -> None:

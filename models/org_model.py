@@ -11,10 +11,9 @@ class OrgModel(QAbstractItemModel):
     def __init__(self, parent=None):
         super().__init__(parent)
         self._columns = ("objectName", "chief", "data")
+        self._hlabels = ["Подразделение", "Руководитель", ""]
 
         self._root_item = QObject(self)
-        self.setHeaderData(0, Qt.Orientation.Horizontal,  "Подразделение", Qt.ItemDataRole.DisplayRole)
-        self.setHeaderData(1, Qt.Orientation.Horizontal,  "Руководитель", Qt.ItemDataRole.DisplayRole)
 
     def add_item(self, item: QObject, parent_index: QModelIndex = None):
         self.beginInsertRows(parent_index, self.rowCount(parent_index), self.rowCount(parent_index))
@@ -53,6 +52,11 @@ class OrgModel(QAbstractItemModel):
             if index.row() % 2 == 0:
                 return QBrush(Qt.GlobalColor.yellow)
         return None
+
+    def headerData(self, section: int, orientation: Qt.Orientation, role: int = ...) -> typing.Any:
+        if orientation != Qt.Orientation.Horizontal or role != Qt.ItemDataRole.DisplayRole:
+            return None
+        return self._hlabels[section]
 
     def obj_by_index(self, index: QModelIndex) -> QObject:
         if index is None or not index.isValid():
