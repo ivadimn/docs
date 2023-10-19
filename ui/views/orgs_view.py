@@ -24,7 +24,9 @@ class OrgsView(QTreeView):
         header = self.header()
         header.setSectionResizeMode(0, QHeaderView.ResizeMode.Interactive)
         header.setStretchLastSection(True)
-
+        model = header.model()
+        index = model.index(0, 0)
+        model.setData(index, "Header")
         self.org_selected.connect(self.select_child)
 
     def currentChanged(self, current: QModelIndex, previous: QModelIndex) -> None:
