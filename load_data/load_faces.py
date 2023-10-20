@@ -11,6 +11,7 @@ from settings import birthday_format
 class LoadFaces:
     def __init__(self, data: DataFrame):
         self.orgs = dict()
+        self._raw_faces = list()
         self.data = data
         self.__load_faces()
 
@@ -26,7 +27,9 @@ class LoadFaces:
                 org_name = "Руководство"
             if self.orgs.get(org_name) is None:
                 self.orgs[org_name] = []
-
+            # для вставки через временную таблицу
+            self._raw_faces.append(Face(0, val[0], val[1], val[2].strftime(birthday_format),
+                                        (val[3], val[4], val[5])))
             self.orgs[org_name].append(Face(0, val[0], val[1], val[2].strftime(birthday_format),
                                             (val[3], val[4], val[5])))
 
@@ -44,8 +47,3 @@ class LoadFaces:
                 if len(faces) > 0:
                     rep.insert(faces, [org_id for _ in range(len(faces))])
         print("Update list faces was finished!")
-
-
-
-
-

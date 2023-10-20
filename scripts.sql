@@ -20,19 +20,20 @@ CREATE TABLE tree_path (
 );
 
 
-CREATE TABLE "dep_word" (
-    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
-    "dep_id" INTEGER NOT NULL,
-    "code_word"  TEXT NULL,
-    CONSTRAINT dep_word_dep_id_FK FOREIGN KEY (dep_id) REFERENCES org(id)
-);
-
 CREATE TABLE "face" (
     "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
     "snils" TEXT NOT NULL,
     "birthday"  TEXT NOT NULL
 );
 CREATE UNIQUE INDEX "face_snils_IDX" ON "face" ("snils");
+
+CREATE TABLE "position" (
+    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL,
+    "number"  INT NOT NULL DEFAULT 99
+);
+CREATE UNIQUE INDEX "position_name_IDX" ON "position" ("name");
+
 
 CREATE TABLE "pd" (
 	"id"	INTEGER PRIMARY KEY AUTOINCREMENT,
