@@ -47,3 +47,6 @@ class LoadFaces:
                 if len(faces) > 0:
                     rep.insert(faces, [org_id for _ in range(len(faces))])
         print("Update list faces was finished!")
+
+    def __insert_to_tmp(self):
+        rep = FaceRepository()

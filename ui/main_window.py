@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QMainWindow, QMessageBox, QFileDialog, QApplication
+from PyQt6.QtWidgets import QMainWindow, QMessageBox, QFileDialog, QApplication, QTabWidget
 from PyQt6.QtCore import pyqtSlot, Qt
 from ui.main_menu import MainMenu
 from load_data.load_orgs import LoadOrgs
@@ -6,34 +6,9 @@ from load_data.load_simple import LoadSimple
 from load_data.load_faces import LoadFaces
 from load_data.import_data import ImportData
 from ui.views.orgs_view import OrgsView
+from ui.views.group_view import GroupView
+from ui.widgets.groups_widget import GroupsWidget
 from repositories.org_repository import TreeRepository
-
-
-data = [
-('Вина', 0, 0),
-('Белые сорта вин', 1, 1),
-('Французские белые вина', 2, 2),
-('Chardonnay', 3, 3),
-('Colombard', 4, 3),
-('Folle blanche', 5, 3),
-('Ugni blanc', 6, 3),
-('Muscadelle', 7, 3),
-('Chenin', 8, 3),
-('Итальянские белые вина', 9, 2),
-('Castelli Romani Bianco', 10, 3),
-('Tusculum Bianco', 11, 3),
-('Красные сорта вин', 12, 1),
-('Французкие красные вина', 13, 2),
-('Cabernet', 14, 3),
-('Franc', 15, 4),
-('Sauvignon', 16, 4),
-('Carmenere', 17, 3),
-('Beaujolais nouveau', 18, 3),
-('Итальянские красные вина', 19, 2),
-('Bardolino', 20, 3),
-('Syrah Cabernet', 21, 3),
-('Castelli Romani Rosso', 22, 3),
-]
 
 
 class MainWindow(QMainWindow):
@@ -49,12 +24,25 @@ class MainWindow(QMainWindow):
         main_menu = MainMenu(parent=self)
         self.setMenuBar(main_menu)
 
+        main_menu.groups.triggered.connect(self.nsi_groups)
+
         main_menu.orgs.triggered.connect(self.load_orgs)
         main_menu.deps.triggered.connect(self.load_simple)
         main_menu.faces.triggered.connect(self.load_faces)
 
         main_menu.about_qt.triggered.connect(self.about_qt)
         main_menu.about.triggered.connect(self.about)
+
+        self.tab = QTabWidget()
+        self.tab.setTabsClosable(True)
+        self.tab.tabCloseRequested.connect(self.close_tab)
+        self.setCentralWidget(self.tab)
+
+    @pyqtSlot()
+    def nsi_groups(self):
+        #view = GroupView(self)
+        widget = GroupsWidget(self)
+        self.tab.addTab(widget, "Группы должностей")
 
     def about(self):
         title = "Цифровые нормативные документы"
@@ -69,7 +57,7 @@ class MainWindow(QMainWindow):
     @pyqtSlot()
     def load_orgs(self):
         view = OrgsView(parent=self)
-        self.setCentralWidget(view)
+        self.tab.addTab(view, "Структура")
 
     @pyqtSlot()
     def load_simple(self):
@@ -80,8 +68,8 @@ class MainWindow(QMainWindow):
             return
         file_name = file_dlg.selectedFiles()[0]
         file_dlg.close()
-            # load = LoadSimple(file_name)
-            # load.update_db_deps()
+        # load = LoadSimple(file_name)
+        # load.update_db_deps()
         load = ImportData(file_name)
 
     @pyqtSlot()
@@ -94,3 +82,9 @@ class MainWindow(QMainWindow):
         file_name = file_dlg.selectedFiles()[0]
         load = LoadFaces(file_name)
         load.update_db_faces()
+
+    @pyqtSlot()
+    def close_tab(self):
+        index = self.tab.currentIndex()
+        print(index)
+        self.tab.removeTab(index)

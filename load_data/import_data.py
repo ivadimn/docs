@@ -4,6 +4,7 @@ from typing import List
 from .utils import  extract_org_list
 from load_data.load_orgs import LoadOrgs
 from load_data.load_faces import LoadFaces
+from load_data.load_positions import LoadPositions
 from pprint import pprint
 
 
@@ -16,13 +17,18 @@ class ImportData:
     def __load_data(self, filename: str):
         excel_data = pd.read_excel(filename)
         data = pd.DataFrame(excel_data)
+        load_pos = LoadPositions(data)
+        load_pos.update_db_data()
+
+
         data_orgs = data.iloc[:, [6, 7, 8]]     # выделяем столбцы со структурой
+        #load_orgs = LoadOrgs(data_orgs)
+        #print("Начинаем запись в базу ...")
+        #load_orgs.load_orgs()
 
-        load_orgs = LoadOrgs(data_orgs)
-        print("Начинаем запись в базу ...")
-        load_orgs.load_orgs()
-
+        # data_pos = data.iloc[:, [9]]
         print("Структура загружена!!!")
+
         #load_faces = LoadFaces(data)
         #load_faces.update_db_faces()
 
