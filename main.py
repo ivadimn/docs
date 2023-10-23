@@ -6,7 +6,8 @@ import logging
 
 
 if __name__ == '__main__':
-    logging.basicConfig(encoding="utf-8", level=logging.WARNING)
+    #logging.basicConfig(encoding="utf-8", level=logging.WARNING)
+    logging.basicConfig(level=logging.DEBUG)
     app = Application(sys.argv)
     main_window = MainWindow()
     main_window.show()
