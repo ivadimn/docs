@@ -9,6 +9,7 @@ class Face(Entity):
     birthday: str = None
     fio: tuple = None
     org_id: int = None
+    position: str = None
 
     def row(self) -> tuple:
         return self.pk, self.snils, self.birthday

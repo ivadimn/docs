@@ -1,5 +1,31 @@
+# -----------------------------------------------------------------------------------------------------
+# таблицы для справочника должностей
+
+
+CREATE TABLE "group_position" (
+    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL,
+    "level"  INT NOT NULL
+);
+CREATE UNIQUE INDEX "group_position_name_IDX" ON "group_position" ("name");
+CREATE UNIQUE INDEX "group_position_level_IDX" ON "group_position" ("level");
+
+CREATE TABLE "position" (
+    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL,
+    "group_id"  INT,
+    CONSTRAINT position_group_id_FK FOREIGN KEY (group_id) REFERENCES group_position(id)
+);
+CREATE UNIQUE INDEX "position_name_IDX" ON "position" ("name");
+
+CREATE TABLE "tmp_pos" (
+    "name" TEXT PRIMARY KEY
+);
+
+# -----------------------------------------------------------------------------------------------
 
 # таблицы хранение органиизационной структуры
+
 CREATE TABLE "org" (
     "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
     "code" TEXT NOT NULL,
@@ -18,7 +44,10 @@ CREATE TABLE tree_path (
 	CONSTRAINT tree_path_parent_id_FK FOREIGN KEY (parent_id) REFERENCES org(id) ON DELETE CASCADE
 	CONSTRAINT tree_path_child_id_FK FOREIGN KEY (child_id) REFERENCES org(id) ON DELETE CASCADE
 );
+# ------------------------------------------------------------------------------------------------------------------
 
+# таблицы для хранения персональных данных
+# центральное лицо
 
 CREATE TABLE "face" (
     "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -27,21 +56,15 @@ CREATE TABLE "face" (
 );
 CREATE UNIQUE INDEX "face_snils_IDX" ON "face" ("snils");
 
-CREATE TABLE "group_position" (
-    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
-    "name" TEXT NOT NULL,
-    "level"  INT NOT NULL
+CREATE TABLE "tmp_face" (
+    "snils" TEXT PRIMARY KEY
+    "tn"	INTEGER NOT NULL,
+    "firstname"	TEXT NOT NULL,
+	"name"	TEXT NOT NULL,
+	"fathername" TEXT,
 );
-CREATE UNIQUE INDEX "group_position_name_IDX" ON "group_position" ("name");
-CREATE UNIQUE INDEX "group_position_level_IDX" ON "group_position" ("level");
 
-CREATE TABLE "position" (
-    "id"	INTEGER PRIMARY KEY AUTOINCREMENT,
-    "name" TEXT NOT NULL,
-    "group_id"  INT,
-    CONSTRAINT position_group_id_FK FOREIGN KEY (group_id) REFERENCES group_position(id)
-);
-CREATE UNIQUE INDEX "position_name_IDX" ON "position" ("name");
+# ------------------------------------------------------------------------------------------------------------------
 
 
 CREATE TABLE "pd" (
@@ -53,19 +76,6 @@ CREATE TABLE "pd" (
 	"created_at" TEXT NOT NULL,
 	"closed_at" TEXT
 );
-
-CREATE TABLE "tmp_face" (
-    "snils" TEXT PRIMARY KEY
-    "tn"	INTEGER NOT NULL,
-    "firstname"	TEXT NOT NULL,
-	"name"	TEXT NOT NULL,
-	"fathername" TEXT,
-);
-
-CREATE TABLE "tmp_pos" (
-    "name" TEXT PRIMARY KEY
-);
-
 
 CREATE VIEW org_view AS
     SELECT o.id, o.name, "Chief name", o.parent_id

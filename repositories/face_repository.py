@@ -8,7 +8,7 @@ from settings import birthday_format
 
 class FaceRepository(Repository):
     _SELECT = "SELECT id, snils, birthday FROM face ; "
-    _INSERT_PD = """
+    _INSERT_LOADED = """
         INSERT INTO face (snils, birthday) 
         SELECT snils, birthday 
         FROM tmp_face
@@ -64,6 +64,31 @@ class FaceRepository(Repository):
         query = QSqlQuery(self._DELETE_TMP)
         query.exec()
 
+    def load_from_list(self, data: List[Face]):
+        query = QSqlQuery()
+        query.prepare(self._INSERT_TMP)
+        query.addBindValue([f.snils for f in data])
+        query.addBindValue([f.tn for f in data])
+        query.addBindValue([f.fio[0] for f in data])
+        query.addBindValue([f.fio[1] for f in data])
+        query.addBindValue([f.fio[2] for f in data])
+        if query.execBatch(QSqlQuery.BatchExecutionMode.ValuesAsRows):
+            if self.__insert_loaded():
+                self.__delete_tmp()
+            else:
+                print("Load from tmp error: {0}".format(query.lastError().text()))
+        else:
+            print("Insert into tmp error: {0}".format(query.lastError().text()))
+
+    def __insert_loaded(self) -> bool:
+        query = QSqlQuery()
+        query.prepare(self._INSERT_LOADED)
+        return query.exec()
+
+    def __delete_tmp(self):
+        query = QSqlQuery()
+        query.prepare(self._DELETE_TMP)
+        query.exec()
 
 
 
