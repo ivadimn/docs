@@ -34,7 +34,6 @@ CREATE TABLE "org" (
     "created_at" TEXT NOT NULL,
     "closed_at" TEXT
 );
-CREATE UNIQUE INDEX "org_code_IDX" ON "org" ("code" );
 CREATE UNIQUE INDEX "org_name_IDX" ON "org" ("name" );
 
 CREATE TABLE tree_path (
@@ -57,11 +56,12 @@ CREATE TABLE "face" (
 CREATE UNIQUE INDEX "face_snils_IDX" ON "face" ("snils");
 
 CREATE TABLE "tmp_face" (
-    "snils" TEXT PRIMARY KEY
+    "snils" TEXT PRIMARY KEY,
+    "birthday"  TEXT NOT NULL,
     "tn"	INTEGER NOT NULL,
     "firstname"	TEXT NOT NULL,
 	"name"	TEXT NOT NULL,
-	"fathername" TEXT,
+	"fathername" TEXT
 );
 
 # ------------------------------------------------------------------------------------------------------------------

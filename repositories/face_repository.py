@@ -2,6 +2,8 @@ from PyQt6.QtSql import QSqlQuery
 from typing import Optional, List
 from repositories.repository import Repository
 from model_data.face import Face
+from db.connection import Connection
+import sqlite3 as sql3
 from datetime import date
 from settings import birthday_format
 
@@ -14,7 +16,10 @@ class FaceRepository(Repository):
         FROM tmp_face
         WHERE snils not in ( SELECT snils FROM face) ; 
     """
-    _INSERT_TMP = " INSERT INTO tmp_face (snils, tn, firstname, name, fathername) VALUES (?, ?, ?, ?, ?) ; "
+    _INSERT_TMP = """
+        INSERT INTO tmp_face (snils, birthday, tn, firstname, name, fathername) 
+        VALUES (?, ?, ?, ?, ?, ?) ; 
+    """
     _INSERT_ONE = " INSERT INTO face (snils, birthday) VALUES (?, ?) ; "
     _DELETE_TMP = " DELETE FROM tmp_face ; "
 
@@ -35,6 +40,7 @@ class FaceRepository(Repository):
         query = QSqlQuery()
         query.prepare(self._INSERT_TMP)
         query.addBindValue([face.snils for face in faces])
+        query.addBindValue([face.birthday for face in faces])
         query.addBindValue([face.tn for face in faces])
         query.addBindValue([face.fio[0] for face in faces])
         query.addBindValue([face.fio[1] for face in faces])
@@ -64,21 +70,35 @@ class FaceRepository(Repository):
         query = QSqlQuery(self._DELETE_TMP)
         query.exec()
 
+    # def load_from_list(self, data: List[Face]):
+    #     query = QSqlQuery()
+    #     query.prepare(self._INSERT_TMP)
+    #     query.addBindValue([f.snils for f in data])
+    #     query.addBindValue([f.birthday for f in data])
+    #     query.addBindValue([f.tn for f in data])
+    #     query.addBindValue([f.fio[0] for f in data])
+    #     query.addBindValue([f.fio[1] for f in data])
+    #     query.addBindValue([f.fio[2] for f in data])
+    #     if query.execBatch(QSqlQuery.BatchExecutionMode.ValuesAsRows):
+    #         print("To tmp insert finish!")
+    #         if self.__insert_loaded():
+    #             print("To face insert finish!")
+    #             self.__delete_tmp()
+    #         else:
+    #             print("Load from tmp error: {0}".format(query.lastError().text()))
+    #     else:
+    #         print("Insert into tmp error: {0}".format(query.lastError().text()))
+
     def load_from_list(self, data: List[Face]):
-        query = QSqlQuery()
-        query.prepare(self._INSERT_TMP)
-        query.addBindValue([f.snils for f in data])
-        query.addBindValue([f.tn for f in data])
-        query.addBindValue([f.fio[0] for f in data])
-        query.addBindValue([f.fio[1] for f in data])
-        query.addBindValue([f.fio[2] for f in data])
-        if query.execBatch(QSqlQuery.BatchExecutionMode.ValuesAsRows):
-            if self.__insert_loaded():
-                self.__delete_tmp()
-            else:
-                print("Load from tmp error: {0}".format(query.lastError().text()))
-        else:
-            print("Insert into tmp error: {0}".format(query.lastError().text()))
+        conn = Connection().connection
+        params = [(f.snils, f.birthday, f.tn, f.fio[0], f.fio[1], f.fio[2], ) for f in data]
+        curr = conn.cursor()
+        try:
+            curr.executemany(self._INSERT_TMP, params)
+            conn.commit()
+            print("To tmp insert finish!")
+        except sql3.Error as ex:
+            print("Insert into tmp error: {0}".format(ex.args[0]))
 
     def __insert_loaded(self) -> bool:
         query = QSqlQuery()

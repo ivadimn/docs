@@ -1,5 +1,6 @@
 from pandas.core.frame import DataFrame, Series
 from repositories.pos_repository import PosRepository
+from model_data.position import Position
 
 
 class LoadPositions:
@@ -15,6 +16,8 @@ class LoadPositions:
         self.__data = [elem for elem in data.unique()]
 
     def update_db_data(self):
-        rep = PosRepository()
-        rep.load_from_list(self.__data)
+        # rep = PosRepository()
+        # rep.load_from_list(self.__data)
+        Position.load_from_list(self.__data)
+
 

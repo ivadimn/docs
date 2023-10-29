@@ -34,8 +34,10 @@ class LoadFaces:
                                             (val[3], val[4], val[5]), val[9]))
 
     def update_db_faces(self):
+        print("Begin update faces...")
         rep = FaceRepository()
         rep.load_from_list(self._raw_faces)
+        print("Finish update faces!")
 
 
     # def update_db_faces(self):

@@ -19,7 +19,6 @@ class LoadOrgs:
     def __load_deps(self):
         for index in range(self.data.shape[1]):
             self.__analyze_column(index)
-            print("Обработана колонка {0}!".format(index))
 
     def __analyze_column(self, index: int):
         org = OrgForLoading("", "", "")
@@ -34,7 +33,7 @@ class LoadOrgs:
             if org.name == "Руководство":
                 org.code = "1"
             elif org.name == "Аппарат Правления":
-                org.code = "200"
+                org.code = "2"
             else:
                 org.code = Org.extract_code(org.name)
             if index == 0:
@@ -56,8 +55,7 @@ class LoadOrgs:
         return result
 
     def load_orgs(self):
-        rep = OrgRepository()
-        self.orgs = rep.select()
+        self.orgs = Org.select()
         orgs_cache = dict()
         if len(self.orgs) > 0:
             orgs_cache.update({o.name: o for o in self.orgs})
@@ -66,21 +64,23 @@ class LoadOrgs:
             if lorg in self.orgs:
                 continue
             if dep.parent_name == "":
-                pk = rep.insert([lorg])
+                pk = Org.insert([lorg])
                 lorg.pk = pk
             else:
-                # parent_org = rep.select_by_name(dep.parent_name)
+                #parent_org = rep.select_by_name(dep.parent_name)
+                #parent_org = Org(name=dep.parent_name).load_by_name()
+
                 parent_org = orgs_cache[dep.parent_name]
                 lorg.parent_id = parent_org.pk
-                pk = rep.insert([lorg])
+                pk = Org.insert([lorg])
                 lorg.pk = pk
             orgs_cache[lorg.name] = lorg
         self.__close_orgs()
 
     def __close_orgs(self):
-        rep = OrgRepository()
         pks = [o.pk for o in self.orgs if OrgForLoading(code=o.code, name=o.name) not in self.raw_orgs]
-        rep.close(pks)
+        if len(pks) > 0:
+            Org.close(pks)
 
 
 

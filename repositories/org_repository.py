@@ -1,10 +1,12 @@
 from PyQt6.QtSql import QSqlQuery
+import sqlite3 as sql3
 from typing import Optional, List
 from repositories.repository import Repository
 from model_data.org import Org
 from model_data.dep import Dep
 from datetime import date
 from settings import date_format
+from db.connection import Connection
 
 
 class OrgRepository(Repository):
@@ -17,7 +19,8 @@ class OrgRepository(Repository):
     _SELECT_FIRST_LEVEL = """
         SELECT id, code, name, parent_id, created_at 
         FROM org 
-        WHERE parent_id is NULL and closed_at is NULL ; """
+        WHERE parent_id is NULL and closed_at is NULL 
+        ORDER BY code ; """
     _SELECT_TREE = """
         SELECT id, code, name, parent_id, created_at 
         FROM org 
@@ -88,11 +91,13 @@ class OrgRepository(Repository):
             return []
         return self.__extract_data(query)
 
-    def __extract_data(self, query: QSqlQuery) -> List[Org]:
+    def __extract_data(self, curr: sql3.Cursor) -> List[Org]:
         orgs = list()
-        while query.next():
-            orgs.append(Org(query.value("id"), query.value("code"), query.value("name"),
-                            query.value("parent_id"), query.value("created_at")))
+        result = curr.fetchall()
+        for o in result:
+            # orgs.append(Org(o[0], o[1], o[2], o[3], o[4]))
+            orgs.append(Org(*o))
+            print(*o)
         return orgs
 
     def __insert_tree_path(self, parent_id: int, child_id: int) -> None:
@@ -110,10 +115,9 @@ class OrgRepository(Repository):
         return orgs
 
     def select_first_level(self) -> List[Org]:
-        query = QSqlQuery()
-        query.prepare(self._SELECT_FIRST_LEVEL)
-        query.exec()
-        orgs = self.__extract_data(query)
+        curr = Connection().connection.cursor()
+        curr.execute(self._SELECT_FIRST_LEVEL)
+        orgs = self.__extract_data(curr)
         return orgs
 
     def insert(self, entities: List[Org]) -> int:
