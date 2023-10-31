@@ -2,7 +2,6 @@ import sys
 from application import Application
 from ui.main_window import MainWindow
 from db.connection import Connection
-from model_data.position import Position
 import logging
 
 

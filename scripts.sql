@@ -61,7 +61,8 @@ CREATE TABLE "tmp_face" (
     "tn"	INTEGER NOT NULL,
     "firstname"	TEXT NOT NULL,
 	"name"	TEXT NOT NULL,
-	"fathername" TEXT
+	"fathername" TEXT,
+	"position" TEXT NOT NULL
 );
 
 # ------------------------------------------------------------------------------------------------------------------

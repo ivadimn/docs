@@ -1,10 +1,6 @@
 from pandas.core.frame import DataFrame
 from pandas import notna
-from typing import List
-from repositories.face_repository import FaceRepository
-from repositories.org_repository import OrgRepository
 from model_data.face import Face
-from pprint import pprint
 from settings import birthday_format
 
 
@@ -28,17 +24,13 @@ class LoadFaces:
             if self.orgs.get(org_name) is None:
                 self.orgs[org_name] = []
             # для вставки через временную таблицу
-            self._raw_faces.append(Face(0, val[0], val[1], val[2].strftime(birthday_format),
-                                        (val[3], val[4], val[5]), val[9]))
-            self.orgs[org_name].append(Face(0, val[0], val[1], val[2].strftime(birthday_format),
-                                            (val[3], val[4], val[5]), val[9]))
+            self._raw_faces.append(Face(pk=0, tn=val[0], snils=val[1], birthday=val[2].strftime(birthday_format),
+                                        fio=(val[3], val[4], val[5]), org_name=org_name, position=val[9]))
+            self.orgs[org_name].append(Face(pk=0, tn=val[0], snils=val[1], birthday=val[2].strftime(birthday_format),
+                                            fio=(val[3], val[4], val[5]), org_name=org_name, position=val[9]))
 
     def update_db_faces(self):
-        print("Begin update faces...")
-        rep = FaceRepository()
-        rep.load_from_list(self._raw_faces)
-        print("Finish update faces!")
-
+        Face.load_from_list(self._raw_faces)
 
     # def update_db_faces(self):
     #     print("Now updating list faces ...")
@@ -54,4 +46,3 @@ class LoadFaces:
     #             if len(faces) > 0:
     #                 rep.insert(faces, [org_id for _ in range(len(faces))])
     #     print("Update list faces was finished!")
-

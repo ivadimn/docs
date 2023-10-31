@@ -37,8 +37,29 @@ query = {
         "_SELECT_ONE": "SELECT id, code, name, parent_id, created_at FROM org WHERE id=? ;",
         "_SELECT_BY_NAME": "SELECT id, code, name, parent_id, created_at FROM org WHERE name=? ;",
         "_INSERT_TMP": "",
-        "_DELETE_TMP": "DELETE FROM org WHERE id=?; ",
+        "_DELETE_TMP": "",
         "_INSERT_LOADED": "",
         "_CLOSE": "UPDATE org SET closed_at=? WHERE id=? ;"
+    },
+    "Face": {
+        "_SELECT": """
+            SELECT id, snils, birthday FROM face ; 
+        """,
+        "_INSERT": "INSERT INTO face (snils, birthday) VALUES (?, ?) ;",
+        "_UPDATE": "",
+        "_DELETE": "",
+        "_SELECT_ONE": "SELECT id, code, name, parent_id, created_at FROM org WHERE id=? ;",
+        "_SELECT_BY_NAME": "SELECT id, code, name, parent_id, created_at FROM org WHERE name=? ;",
+        "_INSERT_TMP": """
+             INSERT INTO tmp_face (snils, birthday, tn, firstname, name, fathername, position) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?) ; 
+        """,
+        "_DELETE_TMP": "DELETE FROM tmp_face ; ",
+        "_INSERT_LOADED": """
+            INSERT INTO face (snils, birthday) 
+                SELECT snils, birthday 
+                FROM tmp_face
+                WHERE snils not in ( SELECT snils FROM face) ; 
+        """,
     },
 }
