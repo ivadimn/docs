@@ -30,7 +30,7 @@ query = {
         "_SELECT_PARENTS": """
             SELECT parent_id FROM tree_path WHERE child_id = ? AND parent_id <> child_id ;
         """,
-        "_INSERT": "INSERT INTO org (code, name, parent_id, created_at, closed_at) VALUES(?, ?, ?, ?, ?); ",
+        "_INSERT": "INSERT INTO org (code, name, parent_id) VALUES(?, ?, ?); ",
         "_INSERT_TREE_PATH": "INSERT INTO tree_path (parent_id, child_id) VALUES(?, ?) ;",
         "_UPDATE": "",
         "_DELETE": "",
@@ -39,7 +39,7 @@ query = {
         "_INSERT_TMP": "",
         "_DELETE_TMP": "",
         "_INSERT_LOADED": "",
-        "_CLOSE": "UPDATE org SET closed_at=? WHERE id=? ;"
+        "_CLOSE": "UPDATE org SET closed_at=datetime('now','localtime') WHERE id=? ;"
     },
     "Face": {
         "_SELECT": """
@@ -61,5 +61,26 @@ query = {
                 FROM tmp_face
                 WHERE snils not in ( SELECT snils FROM face) ; 
         """,
+    },
+    "Pd": {
+        "_SELECT": """
+            SELECT id, face_id, firstname, name, fathername FROM pd
+                WHERE closed_at is NULL; 
+        """,
+        "_INSERT": """
+            INSERT INTO pd (face_id, firstname, name, fathername) 
+                VALUES (?, ?, ?, ?) ;
+        """,
+        "_UPDATE": "",
+        "_DELETE": "",
+        "_SELECT_ONE": "SELECT id, face_id, firstname, name, fathername FROM pd WHERE id=? ;",
+        "_SELECT_BY_NAME": "",
+        "_SELECT_TMP": """
+            SELECT f.id, t.firstname, t.name, t.fathername
+                FROM face f INNER JOIN tmp_face t ON t.snils = f.snils ; 
+        """,
+        "_DELETE_TMP": "",
+        "_INSERT_LOADED": "",
+        "_CLOSE": "UPDATE pd SET closed_at=datetime('now','localtime') WHERE id=? ;",
     },
 }

@@ -31,7 +31,7 @@ CREATE TABLE "org" (
     "code" TEXT NOT NULL,
     "name"  TEXT NOT NULL,
     "parent_id" INT,
-    "created_at" TEXT NOT NULL,
+    "created_at" TEXT NOT NULL DEFAULT (datetime('now','localtime')),
     "closed_at" TEXT
 );
 CREATE UNIQUE INDEX "org_name_IDX" ON "org" ("name" );
@@ -40,8 +40,8 @@ CREATE TABLE tree_path (
 	"parent_id" INTEGER NOT NULL,
 	"child_id" INTEGER NOT NULL,
 	PRIMARY KEY (parent_id, child_id),
-	CONSTRAINT tree_path_parent_id_FK FOREIGN KEY (parent_id) REFERENCES org(id) ON DELETE CASCADE
-	CONSTRAINT tree_path_child_id_FK FOREIGN KEY (child_id) REFERENCES org(id) ON DELETE CASCADE
+	CONSTRAINT tree_path_parent_id_FK FOREIGN KEY (parent_id) REFERENCES org(id)
+	CONSTRAINT tree_path_child_id_FK FOREIGN KEY (child_id) REFERENCES org(id)
 );
 # ------------------------------------------------------------------------------------------------------------------
 
@@ -74,8 +74,9 @@ CREATE TABLE "pd" (
 	"firstname"	TEXT NOT NULL,
 	"name"	TEXT NOT NULL,
 	"fathername" TEXT,
-	"created_at" TEXT NOT NULL,
-	"closed_at" TEXT
+	"created_at" TEXT NOT NULL DEFAULT (datetime('now','localtime')),
+	"closed_at" TEXT,
+	CONSTRAINT pd_face_id_FK FOREIGN KEY (face_id) REFERENCES face(id)
 );
 
 CREATE VIEW org_view AS

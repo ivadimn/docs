@@ -22,19 +22,20 @@ class ImportData:
         # load_pos = LoadPositions(data)
         # load_pos.update_db_data()
         # print("Должности загружены!")
-
-
+        #
+        #
         # data_orgs = data.iloc[:, [6, 7, 8]]     # выделяем столбцы со структурой
         # load_orgs = LoadOrgs(data_orgs)
         # print("Начинаем запись в базу ...")
         # load_orgs.load_orgs()
         # print("Структура загружена!!!")
 
-        # data_pos = data.iloc[:, [9]]
+
         #
         print("Грузим людей ...")
         load_faces = LoadFaces(data)
-        load_faces.update_db_faces()
+        #load_faces.update_db_faces()
+        load_faces.update_db_pd()
         print("Люди загружены!")
 
     def prepare_orgs(self):

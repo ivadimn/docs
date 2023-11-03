@@ -50,7 +50,7 @@ class Org(Entity):
     def insert(cls, entities: List["Org"]) -> int:
         rid = 0
         for org in entities:
-            params = (org.code, org.name, org.parent_id, date.today().strftime(date_format), org.closed_at, )
+            params = (org.code, org.name, org.parent_id, )
             rid = Db.insert(query["Org"]["_INSERT"], params)
             if org.parent_id is None:
                 Db.insert(query["Org"]["_INSERT_TREE_PATH"], (rid, rid,))
@@ -77,8 +77,9 @@ class Org(Entity):
         self.created_at = data[4]
         return self
 
+    @property
     def row(self) -> tuple:
-        return str(self.pk), self.code, self.name, str(self.parent_id)
+        return self.pk, self.code, self.name, self.parent_id
 
     def __eq__(self, other: "Org"):
         return self.name.upper() == other.name.upper()

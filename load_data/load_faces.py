@@ -1,6 +1,7 @@
 from pandas.core.frame import DataFrame
 from pandas import notna
 from model_data.face import Face
+from model_data.pd import Pd
 from settings import birthday_format
 
 
@@ -31,6 +32,10 @@ class LoadFaces:
 
     def update_db_faces(self):
         Face.load_from_list(self._raw_faces)
+
+    def update_db_pd(self):
+        Pd.load_from_tmp()
+
 
     # def update_db_faces(self):
     #     print("Now updating list faces ...")

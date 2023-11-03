@@ -26,7 +26,7 @@ class Face(Entity):
             for f in cursor:
                 faces.append(Face(pk=f[0], snils=f[1], birthday=f[2]))
         except SqlError as ex:
-            LOG.info("Ошибка получения списка kbw: {0}".format(ex.args[0]))
+            LOG.info("Ошибка получения списка лиц: {0}".format(ex.args[0]))
         return faces
 
     @classmethod
@@ -36,10 +36,11 @@ class Face(Entity):
                       [(face.snils, face.birthday, face.tn, face.fio[0],
                         face.fio[1], face.fio[2], face.position) for face in data])
             Db.update(query["Face"]["_INSERT_LOADED"], [])
-            Db.update(query["Face"]["_DELETE_TMP"], [])
+            #Db.update(query["Face"]["_DELETE_TMP"], [])
         except SqlError as ex:
             LOG.info("Ошибка загрузки списка лиц: {0}".format(ex.args[0]))
 
+    @property
     def row(self) -> tuple:
         return self.pk, self.snils, self.birthday
 
