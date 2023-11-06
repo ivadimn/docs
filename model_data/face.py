@@ -6,8 +6,10 @@ from db.sql import query
 from db.db import Db
 
 import logging
+
 LOG = logging.getLogger(__name__)
 LOG.setLevel(logging.DEBUG)
+
 
 @dataclass
 class Face(Entity):
@@ -34,11 +36,14 @@ class Face(Entity):
         try:
             Db.update(query["Face"]["_INSERT_TMP"],
                       [(face.snils, face.birthday, face.tn, face.fio[0],
-                        face.fio[1], face.fio[2], face.position) for face in data])
+                        face.fio[1], face.fio[2], face.org_name, face.position) for face in data])
             Db.update(query["Face"]["_INSERT_LOADED"], [])
-            #Db.update(query["Face"]["_DELETE_TMP"], [])
         except SqlError as ex:
             LOG.info("Ошибка загрузки списка лиц: {0}".format(ex.args[0]))
+
+    @classmethod
+    def delete_tmp(cls):
+        Db.update(query["Face"]["_DELETE_TMP"], [])
 
     @property
     def row(self) -> tuple:
@@ -46,6 +51,3 @@ class Face(Entity):
 
     def __eq__(self, other: "Face"):
         return self.snils == other.snils
-
-
-

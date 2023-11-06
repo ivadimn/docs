@@ -5,10 +5,9 @@ from load_data.load_orgs import LoadOrgs
 from load_data.load_simple import LoadSimple
 from load_data.load_faces import LoadFaces
 from load_data.import_data import ImportData
-from ui.views.orgs_view import OrgsView
+from ui.views.org_frame import OrgFrame
 from ui.views.group_view import GroupView
 from ui.widgets.groups_widget import GroupsWidget
-from repositories.org_repository import TreeRepository
 
 
 class MainWindow(QMainWindow):
@@ -56,8 +55,8 @@ class MainWindow(QMainWindow):
 
     @pyqtSlot()
     def load_orgs(self):
-        view = OrgsView(parent=self)
-        self.tab.addTab(view, "Структура")
+        frame = OrgFrame(parent=self)
+        self.tab.addTab(frame, "Структура")
 
     @pyqtSlot()
     def load_simple(self):

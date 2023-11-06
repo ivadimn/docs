@@ -2,6 +2,7 @@ from pandas.core.frame import DataFrame
 from pandas import notna
 from model_data.face import Face
 from model_data.pd import Pd
+from model_data.shtat import Shtat
 from settings import birthday_format
 
 
@@ -36,7 +37,11 @@ class LoadFaces:
     def update_db_pd(self):
         Pd.load_from_tmp()
 
+    def update_db_shtat(self):
+        Shtat.load_from_tmp()
 
+    def delete_tmp(self):
+        Face.delete_tmp()
     # def update_db_faces(self):
     #     print("Now updating list faces ...")
     #     rep = FaceRepository()

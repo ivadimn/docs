@@ -1,6 +1,5 @@
-from PyQt6.QtWidgets import QTreeView, QHeaderView
-from PyQt6.QtCore import QObject, QModelIndex, Qt, pyqtSignal, pyqtSlot
-from PyQt6.QtGui import QStandardItemModel
+from PyQt6.QtWidgets import QTreeView
+from PyQt6.QtCore import QModelIndex, pyqtSignal, pyqtSlot
 from models.org_model import OrgModel
 
 
@@ -8,9 +7,9 @@ class OrgsView(QTreeView):
 
     org_selected = pyqtSignal(QModelIndex)
 
-    @pyqtSlot(QModelIndex)
-    def select_child(self, index: QModelIndex):
-        self._model.get_children(index)
+    # @pyqtSlot(QModelIndex)
+    # def select_child(self, index: QModelIndex):
+    #     self._model.get_children(index)
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -23,7 +22,13 @@ class OrgsView(QTreeView):
         self.setModel(self._model)
         self.hideColumn(2)
 
-        self.org_selected.connect(self.select_child)
+        header = self.header()
+        header.setSectionResizeMode(header.ResizeMode.ResizeToContents)
+        #self.org_selected.connect(self.select_child)
+
+    @property
+    def model(self):
+        return self._model
 
     def currentChanged(self, current: QModelIndex, previous: QModelIndex) -> None:
         if current.isValid():

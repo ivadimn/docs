@@ -1,3 +1,4 @@
+import sqlite3
 from sqlite3 import Error as SqlError
 from dataclasses import dataclass
 from typing import Optional, List
@@ -36,15 +37,27 @@ class Org(Entity):
         return "/".join(codes[:-1])
 
     @classmethod
-    def select(cls) -> List["Org"]:
+    def __select(cls, sql: str, params: tuple = None) -> List["Org"]:
         poss = list()
         try:
-            cursor = Db.select(query["Org"]["_SELECT"])
+            cursor = Db.select(sql, params)
             for p in cursor:
                 poss.append(Org(*p))
         except SqlError as ex:
             LOG.info("Ошибка получения списка орг. единиц: {0}".format(ex.args[0]))
         return poss
+
+    @classmethod
+    def select(cls) -> List["Org"]:
+        return cls.__select(query["Org"]["_SELECT"])
+
+    @classmethod
+    def select_first_level(cls) -> List["Org"]:
+        return cls.__select(query["Org"]["_SELECT_FIRST_LEVEL"])
+
+    @classmethod
+    def select_child(cls, parent_id: int) -> List["Org"]:
+        return cls.__select(query["Org"]["_SELECT_LEVEL_CHILD"], (parent_id,))
 
     @classmethod
     def insert(cls, entities: List["Org"]) -> int:

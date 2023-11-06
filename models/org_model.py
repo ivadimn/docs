@@ -1,8 +1,7 @@
 from PyQt6.QtCore import QAbstractItemModel, QObject, QModelIndex, Qt
 import typing
-
 from PyQt6.QtGui import QBrush, QColor
-
+from model_data.org import Org
 from repositories.org_repository import OrgRepository
 
 
@@ -50,7 +49,8 @@ class OrgModel(QAbstractItemModel):
             return self.obj_by_index(index).property("data")
         elif role == Qt.ItemDataRole.BackgroundRole:
             if index.row() % 2 == 0:
-                return QBrush(Qt.GlobalColor.yellow)
+                #return QBrush(Qt.GlobalColor.lightGray)
+                return QBrush(0xF2EECD)
         return None
 
     def headerData(self, section: int, orientation: Qt.Orientation, role: int = ...) -> typing.Any:
@@ -64,8 +64,7 @@ class OrgModel(QAbstractItemModel):
         return index.internalPointer()
 
     def init_model(self) -> None:
-        rep = OrgRepository()
-        orgs = rep.select_first_level()
+        orgs = Org.select_first_level()
         for org in orgs:
             item = QObject()
             item.setProperty("objectName", org.name)
@@ -78,8 +77,7 @@ class OrgModel(QAbstractItemModel):
         if len(obj.children()) > 0:
             return
         parent_org = obj.property("data")
-        rep = OrgRepository()
-        orgs = rep.select_child(parent_org.pk)
+        orgs = Org.select_child(parent_org.pk)
         for org in orgs:
             item = QObject()
             item.setProperty("objectName", org.name)

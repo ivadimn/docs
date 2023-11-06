@@ -34,8 +34,10 @@ class ImportData:
         #
         print("Грузим людей ...")
         load_faces = LoadFaces(data)
-        #load_faces.update_db_faces()
+        load_faces.update_db_faces()
         load_faces.update_db_pd()
+        load_faces.update_db_shtat()
+        load_faces.delete_tmp()
         print("Люди загружены!")
 
     def prepare_orgs(self):

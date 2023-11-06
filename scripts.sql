@@ -62,11 +62,11 @@ CREATE TABLE "tmp_face" (
     "firstname"	TEXT NOT NULL,
 	"name"	TEXT NOT NULL,
 	"fathername" TEXT,
+	"org_name" TEXT NOT NULL,
 	"position" TEXT NOT NULL
 );
 
 # ------------------------------------------------------------------------------------------------------------------
-
 
 CREATE TABLE "pd" (
 	"id"	INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -78,6 +78,23 @@ CREATE TABLE "pd" (
 	"closed_at" TEXT,
 	CONSTRAINT pd_face_id_FK FOREIGN KEY (face_id) REFERENCES face(id)
 );
+# -----------------------------------------------------------------------------------------------------------------
+CREATE TABLE "shtat" (
+	"id"	INTEGER PRIMARY KEY AUTOINCREMENT,
+	"org_id" INT NOT NULL,
+	"pos_id" INT NOT NULL,
+	"tn" INT NOT NULL,
+	"pd_id" INT NOT NULL,
+	"created_at" TEXT NOT NULL DEFAULT (datetime('now','localtime')),
+	"closed_at" TEXT,
+	CONSTRAINT shtat_org_id_FK FOREIGN KEY (org_id) REFERENCES org(id),
+	CONSTRAINT shtat_pos_id_FK FOREIGN KEY (pos_id) REFERENCES "position(id)",
+	CONSTRAINT shtat_pd_id_FK FOREIGN KEY (pd_id) REFERENCES pg(id)
+);
+CREATE UNIQUE INDEX "pd_data_IDX" ON shtat (org_id, pos_id, tn, pd_id) ;
+
+# -----------------------------------------------------------------------------------------------------------------
+
 
 CREATE VIEW org_view AS
     SELECT o.id, o.name, "Chief name", o.parent_id

@@ -1,12 +1,23 @@
 import sqlite3 as sql3
 from db.connection import Connection
+from settings import db_params
 
 
 class Db:
+    _connection = None
+
+    @classmethod
+    def init_connection(cls):
+        cls._connection = sql3.connect(db_params["dbname"])
+
+    @classmethod
+    def close_connection(cls):
+        if cls._connection:
+            cls._connection.close()
 
     @classmethod
     def select(cls, sql: str, params: tuple = None) -> sql3.Cursor:
-        cursor = Connection().connection.cursor()
+        cursor = cls._connection.cursor()
         if params:
             cursor.execute(sql, params)
         else:
@@ -15,26 +26,24 @@ class Db:
 
     @classmethod
     def insert(cls, sql: str, params: tuple):
-        conn = Connection().connection
-        cursor = conn.cursor()
+        cursor = cls._connection.cursor()
         if len(params) > 0:
             cursor.execute(sql, params)
-            conn.commit()
+            cls._connection.commit()
         else:
             cursor.execute(sql)
-            conn.commit()
+            cls._connection.commit()
         return cursor.lastrowid
 
     @classmethod
     def update(cls, sql: str, params: list) -> int:
-        conn = Connection().connection
-        cursor = conn.cursor()
+        cursor = cls._connection.cursor()
         if len(params) > 0:
             cursor.executemany(sql, params)
-            conn.commit()
+            cls._connection.commit()
         else:
             cursor.execute(sql)
-            conn.commit()
+            cls._connection.commit()
         return cursor.lastrowid
 
 
