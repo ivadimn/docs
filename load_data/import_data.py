@@ -18,17 +18,17 @@ class ImportData:
         excel_data = pd.read_excel(filename)
         data = pd.DataFrame(excel_data)
 
-        # print("Грузим должности...")
-        # load_pos = LoadPositions(data)
-        # load_pos.update_db_data()
-        # print("Должности загружены!")
-        #
-        #
-        # data_orgs = data.iloc[:, [6, 7, 8]]     # выделяем столбцы со структурой
-        # load_orgs = LoadOrgs(data_orgs)
-        # print("Начинаем запись в базу ...")
-        # load_orgs.load_orgs()
-        # print("Структура загружена!!!")
+        print("Грузим должности...")
+        load_pos = LoadPositions(data)
+        load_pos.update_db_data()
+        print("Должности загружены!")
+
+
+        data_orgs = data.iloc[:, [6, 7, 8]]     # выделяем столбцы со структурой
+        load_orgs = LoadOrgs(data_orgs)
+        print("Начинаем запись в базу ...")
+        load_orgs.load_orgs()
+        print("Структура загружена!!!")
 
 
         #

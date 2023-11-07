@@ -1,6 +1,7 @@
-from PyQt6.QtWidgets import QWidget, QHBoxLayout
+from PyQt6.QtWidgets import QWidget, QHBoxLayout, QSplitter
 from PyQt6.QtCore import pyqtSlot, QModelIndex, Qt
 from .orgs_view import OrgsView
+from .staff_view import StaffView
 
 
 class OrgFrame(QWidget):
@@ -11,8 +12,13 @@ class OrgFrame(QWidget):
         self.orgs_view = OrgsView(parent=self)
         self.orgs_view.org_selected.connect(self.org_view_changed)
 
+        splitter = QSplitter(Qt.Orientation.Vertical)
+
+        self.staff_view = StaffView(self)
         hbox = QHBoxLayout(self)
         hbox.addWidget(self.orgs_view)
+        hbox.addWidget(splitter)
+        hbox.addWidget(self.staff_view)
         self.setLayout(hbox)
 
     @pyqtSlot(QModelIndex)

@@ -10,6 +10,7 @@ class OrgTableModel(QAbstractTableModel):
         self.__staffs = list()
         self.__org_id = None
         self._hlabels = ["Должность", "Табельный №", "Фамилия", "Имя", "Отчество"]
+        self.refresh()
 
     @property
     def org(self):
