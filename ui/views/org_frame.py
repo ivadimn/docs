@@ -11,15 +11,18 @@ class OrgFrame(QWidget):
 
         self.orgs_view = OrgsView(parent=self)
         self.orgs_view.org_selected.connect(self.org_view_changed)
-
-        splitter = QSplitter(Qt.Orientation.Vertical)
-
         self.staff_view = StaffView(self)
+
+        splitter = QSplitter(Qt.Orientation.Horizontal)
+        splitter.addWidget(self.orgs_view)
+        splitter.addWidget(self.staff_view)
+
+
         hbox = QHBoxLayout(self)
-        hbox.addWidget(self.orgs_view)
+        #hbox.addWidget(self.orgs_view)
         hbox.addWidget(splitter)
-        hbox.addWidget(self.staff_view)
         self.setLayout(hbox)
+
 
     @pyqtSlot(QModelIndex)
     def org_view_changed(self, current: QModelIndex):
