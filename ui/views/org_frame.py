@@ -23,11 +23,12 @@ class OrgFrame(QWidget):
         hbox.addWidget(splitter)
         self.setLayout(hbox)
 
-
     @pyqtSlot(QModelIndex)
     def org_view_changed(self, current: QModelIndex):
         self.orgs_view.model.get_children(current)
         #self.staff_view.model.refresh
         org = current.data(Qt.ItemDataRole.UserRole+0)
+        self.staff_view.model.refresh(org.pk)
+
         print(org)
 

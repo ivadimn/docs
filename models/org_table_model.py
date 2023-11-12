@@ -9,7 +9,7 @@ class OrgTableModel(QAbstractTableModel):
         super().__init__(parent)
         self.__staffs = list()
         self.__org_id = None
-        self._hlabels = ["Должность", "Табельный №", "Фамилия", "Имя", "Отчество"]
+        self._hlabels = ["Табельный №", "ФИО", "Должность", ]
         self.refresh()
 
     @property
@@ -22,7 +22,7 @@ class OrgTableModel(QAbstractTableModel):
         return len(self.__staffs)
 
     def columnCount(self, parent_index: QModelIndex = ...) -> int:
-        return 0 if parent_index.isValid() else 5
+        return 0 if parent_index.isValid() else 3
 
     def headerData(self, section: int, orientation: Qt.Orientation, role: int = ...) -> typing.Any:
         if orientation != Qt.Orientation.Horizontal or role != Qt.ItemDataRole.DisplayRole:
@@ -34,21 +34,17 @@ class OrgTableModel(QAbstractTableModel):
         c = index.column()
         if role == Qt.ItemDataRole.DisplayRole:
             if c == 0:
-                return self.__staffs[r].position
-            elif c == 1:
                 return self.__staffs[r].tn
+            elif c == 1:
+                return "{0} {1} {2}".format(self.__staffs[r].firstname, self.__staffs[r].name,
+                                            self.__staffs[r].fathername)
             elif c == 2:
-                return self.__staffs[r].firstname
-            elif c == 4:
-                return self.__staffs[r].name
-            elif c == 5:
-                return self.__staffs[r].fathername
+                return self.__staffs[r].position
             else:
                 return f"{r=}, {c=}"
         else:
             return None
 
-    @pyqtSlot(int)
     def refresh(self, org_id: int = None):
         self.beginResetModel()
         self.__org_id = org_id

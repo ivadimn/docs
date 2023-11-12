@@ -26,11 +26,15 @@ class GroupsWidget(QWidget):
         self.setLayout(vbox)
 
         btn_add.clicked.connect(self.add)
+        btn_update.clicked.connect(self.update)
 
     @pyqtSlot()
     def add(self):
         self.__view.add()
 
+    @pyqtSlot()
+    def update(self):
+        self.__view.update()
 
 
 

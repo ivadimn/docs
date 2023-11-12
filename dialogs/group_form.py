@@ -32,6 +32,8 @@ class Ui_GroupForm(object):
         self.lbl_level.setObjectName("lbl_level")
         self.horizontalLayout.addWidget(self.lbl_level)
         self.spn_level = QtWidgets.QSpinBox(parent=GroupForm)
+        self.spn_level.setMinimum(-100)
+        self.spn_level.setMaximum(100)
         self.spn_level.setObjectName("spn_level")
         self.horizontalLayout.addWidget(self.spn_level)
         self.verticalLayout_2.addLayout(self.horizontalLayout)

@@ -14,6 +14,7 @@ LOG.setLevel(logging.DEBUG)
 class Position(Entity):
     name: str = None
     group_id: int = None
+    group_name: str = None
 
     @classmethod
     def select(cls) -> List["Position"]:

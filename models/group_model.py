@@ -25,15 +25,17 @@ class GroupModel(QAbstractTableModel):
         return 0 if parent_index.isValid() else 2
 
     def data(self, index: QModelIndex, role: int = ...) -> typing.Any:
+        r = index.row()
+        c = index.column()
         if role == Qt.ItemDataRole.DisplayRole:
-            r = index.row()
-            c = index.column()
             if c == 0:
                 return self._groups[r].name
             elif c == 1:
                 return self._groups[r].level
             else:
                 return f"{r=}, {c=}"
+        elif role == Qt.ItemDataRole.UserRole+0:
+            return self._groups[r]
         else:
             return None
 

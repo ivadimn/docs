@@ -1,3 +1,4 @@
+from PyQt6.QtCore import Qt
 from .view import View
 from models.group_model import GroupModel
 from dialogs.group_dialog import GroupDialog
@@ -16,7 +17,7 @@ class GroupView(View):
 
     def add(self) -> None:
         dlg = GroupDialog(self)
-        dlg.level = 99
+        dlg.level = 0
         if dlg.exec():
             group = GroupPosition()
             dlg.get(group)
@@ -24,7 +25,15 @@ class GroupView(View):
             self.model.refresh()
 
     def update(self) -> None:
-        pass
+        dlg = GroupDialog(self)
+        index = self.currentIndex()
+        grp = self.model.data(index, Qt.ItemDataRole.UserRole + 0)
+        grp = GroupPosition(pk=grp.pk).load()
+        dlg.put(grp)
+        if dlg.exec():
+            dlg.get(grp)
+            grp.save()
+            self.model.refresh()
 
     def delete(self) -> None:
         pass

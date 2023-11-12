@@ -1,7 +1,10 @@
-from PyQt6.QtSql import QSqlQuery
+from sqlite3 import Error as SqlError
 from dataclasses import dataclass
 from typing import List
 from model_data.entity import Entity
+from db.db import Db
+from db.sql import query
+
 import logging
 LOG = logging.getLogger(__name__)
 LOG.setLevel(logging.DEBUG)
@@ -12,26 +15,16 @@ class GroupPosition(Entity):
     name: str = None
     level: int = None
 
-    _SELECT = """
-           SELECT id, name, level FROM group_position ;
-       """
-    _SELECT_ONE = """
-           SELECT id, name, level 
-               FROM group_position
-               WHERE id=? ;
-           """
-    _INSERT = """
-           INSERT INTO group_position (name, level)
-           VALUES(?, ?) ;
-    """
-    _UPDATE = """
-           UPDATE group_position
-           SET name=?, level=?  
-           WHERE id=? ;
-    """
-    _DELETE = """
-           DELETE FROM group_position WHERE id=? ;
-    """
+    @classmethod
+    def select(cls) -> List["GroupPosition"]:
+        g_poss = list()
+        try:
+            cursor = Db.select(query["GroupPosition"]["_SELECT"])
+            for p in cursor:
+                g_poss.append(GroupPosition(*p))
+        except SqlError as ex:
+            LOG.info("Ошибка получения списка групп должностей: {0}".format(ex.args[0]))
+        return g_poss
 
     def row(self) -> tuple:
         return self.pk, self.name, self.level
@@ -40,55 +33,35 @@ class GroupPosition(Entity):
     def data(self):
         return self.name, self.level
 
-    @classmethod
-    def select(cls) -> List["GroupPosition"]:
-        data: List[GroupPosition] = list()
-        query = QSqlQuery()
-        query.prepare(cls._SELECT)
-        if query.exec():
-            while query.next():
-                data.append(GroupPosition(query.value("id"), query.value("name"), query.value("level")))
-        return data
-
     def load(self) -> "GroupPosition":
-        query = QSqlQuery()
-        query.prepare(self._SELECT_ONE)
-        query.addBindValue(self.pk)
-        if query.exec() and query.first():
-            self.name = query.value("name")
-            self.level = query.value("level")
-        else:
-            LOG.info(query.lastError().text())
+        cursor = Db.select(query["GroupPosition"]["_SELECT_ONE"], (self.pk, ))
+        data = cursor.fetchone()
+        self.pk = data[0]
+        self.name = data[1]
+        self.level = data[2]
+        return self
+
+    def load_by_name(self):
+        cursor = Db.select(query["GroupPosition"]["_SELECT_BY_NAME"], (self.name, ))
+        data = cursor.fetchone()
+        self.pk = data[0]
+        self.level = data[2]
         return self
 
     def __insert(self):
-        query = QSqlQuery()
-        data = self.data
-        query.prepare(self._INSERT)
-        query.addBindValue(data[0])
-        query.addBindValue(data[1])
-        if query.exec():
-            self.pk = query.lastInsertId()
-            LOG.info("Group {0} inserted successfully!".format(self.name))
-        else:
-            LOG.info(query.lastError().text())
+        try:
+            self.pk = Db.insert(query["GroupPosition"]["_INSERT"], self.data)
+        except SqlError as ex:
+            LOG.info("Ошибка обновления группы должностей: {0}".format(ex.args[0]))
 
     def __update(self):
-        query = QSqlQuery()
-        data = self.data
-        query.prepare(self._INSERT)
-        query.addBindValue(data[0])
-        query.addBindValue(data[1])
-        query.addBindValue(self.pk)
-        if query.exec():
-            LOG.info("Group {0} inserted successfully!".format(self.name))
-        else:
-            LOG.info(query.lastError().text())
+        try:
+            Db.update(query["GroupPosition"]["_UPDATE"], [(self.name, self.level, self.pk,)])
+        except SqlError as ex:
+            LOG.info("Ошибка вставки группы должностей: {0}".format(ex.args[0]))
 
     def save(self):
         if self.pk is None:
             return self.__insert()
         else:
             return self.__update()
-
-

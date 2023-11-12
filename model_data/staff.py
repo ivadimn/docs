@@ -32,7 +32,7 @@ class Staff:
     def select_staffs(cls, org_id: int) -> List["Staff"]:
         staffs = list()
         try:
-            cursor = Db.select(query["Staff"]["_SELECT"], (org_id, ))
+            cursor = Db.select(query["Staff"]["_SELECT_FACES"], (org_id, ))
             for st in cursor:
                 staffs.append(Staff(position=st[0], tn=st[1], firstname=st[2], name=st[3], fathername=st[4]))
         except SqlError as ex:

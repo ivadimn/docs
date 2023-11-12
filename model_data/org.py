@@ -3,10 +3,9 @@ from sqlite3 import Error as SqlError
 from dataclasses import dataclass
 from typing import Optional, List
 from model_data.entity import Entity
-from datetime import date
 from db.db import Db
 from db.sql import query
-from settings import date_format
+
 import logging
 LOG = logging.getLogger(__name__)
 LOG.setLevel(logging.DEBUG)

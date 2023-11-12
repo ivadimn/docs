@@ -78,9 +78,14 @@ class OrgModel(QAbstractItemModel):
             return
         parent_org = obj.property("data")
         orgs = Org.select_child(parent_org.pk)
+        if len(orgs) > 0:
+            self.__add_child_orgs(index, orgs)
+
+    def __add_child_orgs(self, index: QModelIndex, orgs: typing.List[Org]):
         for org in orgs:
             item = QObject()
             item.setProperty("objectName", org.name)
             item.setProperty("chief", "Chief")
             item.setProperty("data", org)
             self.add_item(item, index)
+

@@ -8,8 +8,8 @@ class StaffView(QTableView):
         super().__init__(parent)
         self.setSelectionBehavior(self.SelectionBehavior.SelectRows)
         self.setSelectionMode(self.SelectionMode.SingleSelection)
-        hh = self.horizontalHeader()
-        hh.setSectionResizeMode(hh.ResizeMode.ResizeToContents)
+        # hh = self.horizontalHeader()
+        # hh.setSectionResizeMode(hh.ResizeMode.ResizeToContents)
 
         self._model = OrgTableModel(self)
         self.setModel(self._model)
@@ -18,5 +18,3 @@ class StaffView(QTableView):
     def model(self):
         return self._model
 
-    def refresh(self):
-        pass
