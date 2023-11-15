@@ -8,7 +8,7 @@ class MainMenu(QMenuBar):
 
         nsi_menu = self.addMenu("НСИ")
         self.__groups = nsi_menu.addAction("Группы должностей ...")
-        self.__goals = nsi_menu.addAction("Цели обработки ПД")
+        self.__positions = nsi_menu.addAction("Должности ...")
         self.__category = nsi_menu.addAction("Категории субъектов ПД")
 
         load_menu = self.addMenu("Загрузка данных")

@@ -37,4 +37,10 @@ class GroupDialog(QDialog):
         btn_ok.clicked.connect(self.finish)
 
     def __init_levels(self):
+        groups = GroupPosition.select()
+        for g in groups:
+            self.__frame.ui.cbx_level.addItem("{0}: {1}".format(g.name, g.level), g)
+
+
+    def finish(self):
         pass
