@@ -16,6 +16,10 @@ class Position(Entity):
     group_id: int = None
     group_name: str = None
 
+    @property
+    def data(self):
+        return self.name, self.group_id
+
     @classmethod
     def select(cls) -> List["Position"]:
         poss = list()
@@ -36,8 +40,34 @@ class Position(Entity):
         except SqlError as ex:
             LOG.info("Ошибка загрузки списка должностей: {0}".format(ex.args[0]))
 
+    def load(self, pk: int) -> "Position":
+        cursor = Db.select(query["Position"]["_SELECT_ONE"], (self.pk,))
+        data = cursor.fetchone()
+        self.name = data[1]
+        self.group_id = data[2]
+        self.group_name = data[3]
+        return self
+
+    def __insert(self):
+        try:
+            self.pk = Db.insert(query["Position"]["_INSERT"], self.data)
+        except SqlError as ex:
+            LOG.info("Ошибка вставки должности: {0}".format(ex.args[0]))
+
+    def __update(self):
+        try:
+            Db.update(query["Position"]["_UPDATE"], [(self.name, self.group_id, self.pk,)])
+        except SqlError as ex:
+            LOG.info("Ошибка обновления должности: {0}".format(ex.args[0]))
+
+    def save(self):
+        if self.pk is None:
+            return self.__insert()
+        else:
+            return self.__update()
+
     def row(self) -> tuple:
-        return self.pk, self.name, self.group_id
+        return self.pk, self.name, self.group_id, self.group_name
 
     def __eq__(self, other):
         return self.name == other.name

@@ -52,13 +52,13 @@ class GroupPosition(Entity):
         try:
             self.pk = Db.insert(query["GroupPosition"]["_INSERT"], self.data)
         except SqlError as ex:
-            LOG.info("Ошибка обновления группы должностей: {0}".format(ex.args[0]))
+            LOG.info("Ошибка вставки группы должностей: {0}".format(ex.args[0]))
 
     def __update(self):
         try:
             Db.update(query["GroupPosition"]["_UPDATE"], [(self.name, self.level, self.pk,)])
         except SqlError as ex:
-            LOG.info("Ошибка вставки группы должностей: {0}".format(ex.args[0]))
+            LOG.info("Ошибка обновления группы должностей: {0}".format(ex.args[0]))
 
     def save(self):
         if self.pk is None:

@@ -8,6 +8,7 @@ from load_data.import_data import ImportData
 from ui.views.org_frame import OrgFrame
 from ui.views.group_view import GroupView
 from ui.widgets.groups_widget import GroupsWidget
+from ui.widgets.position_widget import PositionWidget
 
 
 class MainWindow(QMainWindow):
@@ -24,6 +25,7 @@ class MainWindow(QMainWindow):
         self.setMenuBar(main_menu)
 
         main_menu.groups.triggered.connect(self.nsi_groups)
+        main_menu.positions.triggered.connect(self.nsi_position)
 
         main_menu.orgs.triggered.connect(self.load_orgs)
         main_menu.deps.triggered.connect(self.load_simple)
@@ -42,6 +44,11 @@ class MainWindow(QMainWindow):
         #view = GroupView(self)
         widget = GroupsWidget(self)
         self.tab.addTab(widget, "Группы должностей")
+
+    @pyqtSlot()
+    def nsi_position(self):
+        widget = PositionWidget(self)
+        self.tab.addTab(widget, "Должности")
 
     def about(self):
         title = "Цифровые нормативные документы"

@@ -4,10 +4,14 @@ query = {
             SELECT p.id, p.name, p.group_id, gp.name 
                 FROM position p LEFT OUTER JOIN group_position gp ON gp.id = p.group_id  ; 
         """,
-        "_INSERT": "INSERT INTO position (name, group_id) VALUES(?, 2) ;",
+        "_INSERT": "INSERT INTO position (name, group_id) VALUES(?, ?) ;",
         "_UPDATE": "UPDATE position SET name=?, group_id=? WHERE id=? ;",
         "_DELETE": "DELETE FROM position WHERE id=? ;",
-        "_SELECT_ONE": "SELECT id, name, group_id FROM position WHERE id=? ;",
+        "_SELECT_ONE": """
+            SELECT p.id, p.name, p.group_id, gp.name 
+                FROM position p LEFT OUTER JOIN group_position gp ON gp.id = p.group_id
+                WHERE id=? ; 
+        """,
         "_SELECT_BY_NAME": "SELECT id, name, group_id FROM position WHERE name=? ;",
         "_INSERT_TMP": "INSERT INTO tmp_pos (name) VALUES(?) ;",
         "_DELETE_TMP": "DELETE FROM tmp_pos ; ",

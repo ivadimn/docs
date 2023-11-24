@@ -26,6 +26,10 @@ class MainMenu(QMenuBar):
         return self.__groups
 
     @property
+    def positions(self):
+        return self.__positions
+
+    @property
     def orgs(self):
         return self.__orgs
 

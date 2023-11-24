@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QDialog, QFrame, QHBoxLayout, QPushButton, QVBoxLayout
 from model_data.group_position import GroupPosition
+from model_data.position import Position
 from .position_form import Ui_PositionForm
 
 
@@ -12,7 +13,7 @@ class _Frame(QFrame):
         self.ui.setupUi(self)
 
 
-class GroupDialog(QDialog):
+class PositionDialog(QDialog):
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -38,9 +39,9 @@ class GroupDialog(QDialog):
 
     def __init_levels(self):
         groups = GroupPosition.select()
+        self.__frame.ui.cbx_level.setModel()
         for g in groups:
             self.__frame.ui.cbx_level.addItem("{0}: {1}".format(g.name, g.level), g)
-
 
     def finish(self):
         pass
