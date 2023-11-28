@@ -40,7 +40,7 @@ class Position(Entity):
         except SqlError as ex:
             LOG.info("Ошибка загрузки списка должностей: {0}".format(ex.args[0]))
 
-    def load(self, pk: int) -> "Position":
+    def load(self) -> "Position":
         cursor = Db.select(query["Position"]["_SELECT_ONE"], (self.pk,))
         data = cursor.fetchone()
         self.name = data[1]

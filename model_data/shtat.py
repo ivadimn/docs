@@ -58,7 +58,7 @@ class Shtat(Entity):
         return self.pk, self.org_id, self.pos_id, self.tn, self.pd_id
 
     def __eq__(self, other):
-        return (self.pk == other.pk and self.org_id == other.org_id
+        return (self.org_id == other.org_id
                 and self.pos_id == other.pos_id and self.tn == other.tn and self.pd_id == other.pd_id)
 
     def __hash__(self):

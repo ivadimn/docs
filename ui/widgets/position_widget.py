@@ -9,18 +9,20 @@ class PositionWidget(QWidget):
         super().__init__(parent)
 
         self.__view = PositionView(self)
-        btn_add = QPushButton("Добавить", self)
-        btn_update = QPushButton("Изменить", self)
-        btn_delete = QPushButton("Удалить", self)
+        btn_update = QPushButton("Установить уровень должности", self)
         spacer = QSpacerItem(50, 10, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         hbox = QHBoxLayout()
-        hbox.addWidget(btn_add)
         hbox.addWidget(btn_update)
-        hbox.addWidget(btn_delete)
         hbox.addSpacerItem(spacer)
 
         vbox = QVBoxLayout(self)
         vbox.addLayout(hbox)
         vbox.addWidget(self.__view)
         self.setLayout(vbox)
+
+        btn_update.clicked.connect(self.update)
+
+    @pyqtSlot()
+    def update(self) -> None:
+        self.__view.update()

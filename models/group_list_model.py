@@ -8,6 +8,7 @@ class GroupListModel(QAbstractListModel):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.__groups = list()
+        self.refresh()
 
     def rowCount(self, parent_index: QModelIndex = ...) -> int:
         if parent_index.isValid():
@@ -22,6 +23,8 @@ class GroupListModel(QAbstractListModel):
     def data(self, index: QModelIndex, role: int = ...) -> typing.Any:
         if role == Qt.ItemDataRole.DisplayRole:
             return self.__groups[index.row()].name
+        elif role == Qt.ItemDataRole.UserRole+0:
+            return self.__groups[index.row()]
         return None
 
     def refresh(self):

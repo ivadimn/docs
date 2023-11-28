@@ -2,7 +2,8 @@ query = {
     "Position": {
         "_SELECT": """
             SELECT p.id, p.name, p.group_id, gp.name 
-                FROM position p LEFT OUTER JOIN group_position gp ON gp.id = p.group_id  ; 
+                FROM position p LEFT OUTER JOIN group_position gp ON gp.id = p.group_id 
+                ORDER BY gp.level; 
         """,
         "_INSERT": "INSERT INTO position (name, group_id) VALUES(?, ?) ;",
         "_UPDATE": "UPDATE position SET name=?, group_id=? WHERE id=? ;",
@@ -10,7 +11,7 @@ query = {
         "_SELECT_ONE": """
             SELECT p.id, p.name, p.group_id, gp.name 
                 FROM position p LEFT OUTER JOIN group_position gp ON gp.id = p.group_id
-                WHERE id=? ; 
+                WHERE p.id=? ; 
         """,
         "_SELECT_BY_NAME": "SELECT id, name, group_id FROM position WHERE name=? ;",
         "_INSERT_TMP": "INSERT INTO tmp_pos (name) VALUES(?) ;",
@@ -23,7 +24,7 @@ query = {
         """,
     },
     "GroupPosition": {
-        "_SELECT": "SELECT id, name, level FROM group_position ; ",
+        "_SELECT": "SELECT id, name, level FROM group_position ORDER BY level ; ",
         "_INSERT": "INSERT INTO group_position (name, level) VALUES(?, ?) ;",
         "_UPDATE": "UPDATE group_position SET name=?, level=? WHERE id=? ;",
         "_DELETE": "DELETE FROM group_position WHERE id=? ;",

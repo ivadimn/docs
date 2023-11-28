@@ -19,7 +19,15 @@ class PositionView(View):
         pass
 
     def update(self) -> None:
-        pass
+        dlg = PositionDialog(self)
+        index = self.currentIndex()
+        pos = self.__model.data(index, Qt.ItemDataRole.UserRole + 0)
+        pos = Position(pk=pos.pk).load()
+        dlg.put(pos)
+        if dlg.exec():
+            dlg.get(pos)
+            pos.save()
+            self.__model.refresh()
 
     def delete(self) -> None:
         pass

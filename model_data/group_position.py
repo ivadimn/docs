@@ -65,3 +65,6 @@ class GroupPosition(Entity):
             return self.__insert()
         else:
             return self.__update()
+
+    def __eq__(self, other):
+        return self.pk == other.pk

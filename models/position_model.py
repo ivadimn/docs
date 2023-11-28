@@ -45,5 +45,7 @@ class PositionTableModel(QAbstractTableModel):
                 return self.__poss[r].group_name
             else:
                 return f"{r=}, {c=}"
+        elif role == Qt.ItemDataRole.UserRole+0:
+            return self.__poss[r]
         else:
             return None
