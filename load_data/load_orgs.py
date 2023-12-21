@@ -13,7 +13,6 @@ class LoadOrgs:
         self.data = data
         self.orgs: List[Org] = list()
         self.__load_deps()
-        print("Департаменты загружены!")
 
 # анализ файла производиться по колонкам
     def __load_deps(self):
@@ -63,6 +62,7 @@ class LoadOrgs:
             lorg = Org(0, dep.code, dep.name, None, "")
             if lorg in self.orgs:
                 continue
+            print(lorg)
             if dep.parent_name == "":
                 pk = Org.insert([lorg])
                 lorg.pk = pk
@@ -80,6 +80,7 @@ class LoadOrgs:
     def __close_orgs(self):
         pks = [o.pk for o in self.orgs if OrgForLoading(code=o.code, name=o.name) not in self.raw_orgs]
         if len(pks) > 0:
+            #проработать закрытие оргединицы
             Org.close(pks)
 
 

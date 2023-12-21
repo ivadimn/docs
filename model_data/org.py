@@ -78,6 +78,7 @@ class Org(Entity):
 
     @classmethod
     def close(cls, pks: List[int]):
+        # закрыть позиции штатного расписания
         Db.update(query["Org"]["_CLOSE"], [(pk,) for pk in pks])
 
     def load_by_name(self):

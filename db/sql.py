@@ -35,6 +35,10 @@ query = {
         "_INSERT_LOADED": "",
     },
     "Org": {
+        "_SELECT_FOR_LOAD": """
+            SELECT id, code, name, parent_id, created_at, closed_at
+                FROM org ; 
+        """,
         "_SELECT": """
             SELECT id, code, name, parent_id, created_at 
                 FROM org 

@@ -53,6 +53,7 @@ class Pd(Entity):
             Db.update(query["Pd"]["_INSERT"], [(pd.face_id, pd.firstname, pd.name, pd.fathername,) for pd in dpd])
         dpclose = (pds - pds_tmp)
         if len(dpclose) > 0:
+            # закрыть в штатном расписании
             Db.update(query["Pd"]["_CLOSE"], [(pd.pk,) for pd in dpclose])
 
     @property

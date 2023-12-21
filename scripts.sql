@@ -34,7 +34,7 @@ CREATE TABLE "org" (
     "created_at" TEXT NOT NULL DEFAULT (datetime('now','localtime')),
     "closed_at" TEXT
 );
-CREATE UNIQUE INDEX "org_name_IDX" ON "org" ("name" );
+CREATE UNIQUE INDEX "org_name_IDX" ON "org" ("name", "created_at");
 
 CREATE TABLE tree_path (
 	"parent_id" INTEGER NOT NULL,
