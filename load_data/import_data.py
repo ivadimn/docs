@@ -23,10 +23,9 @@ class ImportData:
         load_pos.update_db_data()
         print("Должности загружены!")
 
-
+        print("Грузим структуру ...")
         data_orgs = data.iloc[:, [6, 7, 8]]     # выделяем столбцы со структурой
         load_orgs = LoadOrgs(data_orgs)
-        print("Начинаем запись в базу ...")
         load_orgs.load_orgs()
         print("Структура загружена!!!")
 
